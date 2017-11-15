@@ -1,11 +1,35 @@
+import {RadarChart, SongChart} from './radar.js';
 
 let sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
   'valence', 'danceability',
   'tempo',
 ]
 let numeric_song_attrs = [
-  'Year', 'peak', 'wksonchart', 'typicality',
+  //'Year', 
+  'peak', 'wksonchart', 'typicality',
 ].concat(sonic_attrs);
+
+
+class Song {
+
+  static fromRow(row) {
+    let s = new Song();
+    s.Year = +row.Year; // XXX
+    for (let attr of numeric_song_attrs) {
+      s[attr] = +row.attr;
+    }
+    s.artist = row.artist;
+    s.track = row.track; // XXX
+    return s;
+  }
+
+  get decade() {
+    return this.Year - (this.Year % 10);
+  }
+
+  get vector() {
+  }
+}
 
 function mungeSongRow(row) {
   for (let attr of numeric_song_attrs) {
@@ -35,22 +59,14 @@ class SongExplorer {
     this.margin = {top: 20, right: 20, bottom: 50, left: 20}
 
     // default song
-    this.song = songdat[0];
+    this.song = songdat[50];
     this.decade = this.song.decade;
     console.log(this.decade)
     this.year = this.song.Year;
 
     this.setupControls();
     this.songView = this.root.append('div').classed('song-view', true);
-    this.renderSong();
-  }
-
-  renderSong() {
-    let title = this.songView.select('.title');
-    if (title.empty()) {
-      title = this.songView.append('span').classed('title', true);
-    }
-    title.text(this.song.track);
+    this.songChart = new SongChart(this.songView, this.song);
   }
 
   setupControls() {
@@ -104,6 +120,7 @@ class SongExplorer {
   setYear(year) {
     console.log('Setting year to ', year);
     this.year = year;
+    this.year_picker.selectAll('.year-selector').classed('active', year=>year==this.year);
     this.updateSongs();
   }
 
@@ -125,16 +142,21 @@ class SongExplorer {
   }
 
   selectSong(song) {
+    console.log(`Setting song to ${song.track}`)
     this.song = song;
-    this.renderSong();
+    this.song_picker.selectAll('.song-selector').classed('active', song => song==this.song);
+    this.songChart.setSong(this.song);
   }
 
   contrastSong(song) {
     // TODO
   }
 
+  decontrastSong(song) {
+  }
+
   static init() {
-    d3.csv('assets/number_ones.csv', mungeSongRow, dat => new SongExplorer(dat)); 
+    d3.csv('assets/number_ones.csv', Song.fromRow, dat => new SongExplorer(dat)); 
   }
 }
 
