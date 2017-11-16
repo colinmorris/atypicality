@@ -2,12 +2,17 @@ import {RadarChart, SongChart} from './radar.js';
 import {Song} from './song.js';
 import {typicality_cmap} from './common.js';
 
+let min_year = 1958;
+let max_year = 2016;
 let decades = [1950,1960,1970, 1980, 1990, 2000, 2010];
 
 function years_for_decade(decade) {
   let years = []
   for (let i=0; i<10; i++) {
-    years.push( decade + i );
+    let yr = decade + i;
+    if (yr >= min_year && yr <= max_year) {
+      years.push( decade + i );
+    }
   }
   return years;
 }
@@ -77,7 +82,7 @@ class SongExplorer {
     this.decade = decade
     this.root.selectAll('.decade-selector')
       .classed('active', decade => decade == this.decade);
-    this.year = this.decade;
+    this.year = Math.min(max_year, Math.max(min_year, this.decade));
     this.updateYears();
     this.updateSongs();
   }
