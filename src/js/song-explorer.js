@@ -1,43 +1,6 @@
 import {RadarChart, SongChart} from './radar.js';
-
-let sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
-  'valence', 'danceability',
-  'tempo',
-]
-let numeric_song_attrs = [
-  //'Year', 
-  'peak', 'wksonchart', 'typicality',
-].concat(sonic_attrs);
-
-
-class Song {
-
-  static fromRow(row) {
-    let s = new Song();
-    s.Year = +row.Year; // XXX
-    for (let attr of numeric_song_attrs) {
-      s[attr] = +row.attr;
-    }
-    s.artist = row.artist;
-    s.track = row.track; // XXX
-    return s;
-  }
-
-  get decade() {
-    return this.Year - (this.Year % 10);
-  }
-
-  get vector() {
-  }
-}
-
-function mungeSongRow(row) {
-  for (let attr of numeric_song_attrs) {
-    row[attr] = +row[attr];
-  }
-  row.decade = row.Year - (row.Year % 10)
-  return row
-}
+import {Song} from './song.js';
+import {typicality_cmap} from './common.js';
 
 let decades = [1950,1960,1970, 1980, 1990, 2000, 2010];
 
@@ -95,7 +58,7 @@ class SongExplorer {
     this.decade = decade
     this.root.selectAll('.decade-selector')
       .classed('active', decade => decade == this.decade);
-    this.year = undefined
+    this.year = this.decade;
     this.updateYears();
     this.updateSongs();
   }
@@ -137,7 +100,11 @@ class SongExplorer {
 
     sel.merge(newsongs)
     .text(song=>song.track)
+    .style('color', song => typicality_cmap(song.typicality))
     .on('click', song => this.selectSong(song))
+    .on('mouseover', song => this.contrastSong(song))
+    .on('mouseout', song => this.decontrastSong())
+    .on('contextmenu', song => this.songChart.setSticky()) // XXX: temporary hack
     .classed('active', song => song==this.song)
   }
 
@@ -149,10 +116,14 @@ class SongExplorer {
   }
 
   contrastSong(song) {
-    // TODO
+    if (song == this.song) {
+      return;
+    }
+    this.songChart.contrastSong(song);
   }
 
-  decontrastSong(song) {
+  decontrastSong() {
+    this.songChart.decontrastSong();
   }
 
   static init() {
