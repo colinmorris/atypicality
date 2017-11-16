@@ -53,11 +53,13 @@ class SongChart {
     this.heading.select('.main').text(main);
     let con = this.heading.select('.contrast');
     if (this.contrast) {
+      con.style('opacity', 1);
       let sim = 100 * this.song.similarity(this.contrast);
       let con_text = ` vs. ${this.contrast.artist} - ${this.contrast.track} (${sim.toPrecision(3)}% similar)`;
       con.text(con_text);
     } else {
-      con.text('');
+      con.text('|');
+      con.style('opacity', 0);
     }
   }
 

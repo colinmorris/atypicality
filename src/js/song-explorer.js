@@ -30,6 +30,25 @@ class SongExplorer {
     this.setupControls();
     this.songView = this.root.append('div').classed('song-view', true);
     this.songChart = new SongChart(this.songView, this.song);
+    this.moreSongs = this.root.append('div')
+    let moreby = this.moreSongs.append('div')
+      .classed('moreby', true)
+      .classed('picker', true)
+      .style('display', 'none')
+    moreby.append('span').classed('label', true);
+    moreby.append('span').classed('songs', true);
+    this.moreby = moreby;
+    let simsongs = this.moreSongs.append('div')
+      .classed('simsongs', true)
+      .classed('picker', true)
+    simsongs.append('span').classed('label', true).text('Similar songs: ');
+    simsongs.append('span').classed('songs', true);
+    let simsongs_future = this.moreSongs.append('div')
+      .classed('simsongs-future', true)
+      .classed('picker', true)
+    simsongs_future.append('span').classed('label', true).text('Similar songs (future): ');
+    simsongs_future.append('span').classed('songs', true);
+    this.selectSong(this.song);
   }
 
   setupControls() {
@@ -108,11 +127,62 @@ class SongExplorer {
     .classed('active', song => song==this.song)
   }
 
+  populateSongs(root, songs) {
+    // TODO: refactor above
+    let sel = root.selectAll('.song-selector').data(songs);
+    sel.exit().remove();
+    let newsongs = sel.enter()
+    .append('a')
+    .classed('song-selector', true)
+
+    sel.merge(newsongs)
+    .text(song=>song.track)
+    .style('color', song => typicality_cmap(song.typicality))
+    .on('click', song => this.selectSong(song))
+    .on('mouseover', song => this.contrastSong(song))
+    .on('mouseout', song => this.decontrastSong())
+    .on('contextmenu', song => this.songChart.setSticky()) // XXX: temporary hack
+    .classed('active', song => song==this.song)
+
+  }
+
   selectSong(song) {
     console.log(`Setting song to ${song.track}`)
     this.song = song;
     this.song_picker.selectAll('.song-selector').classed('active', song => song==this.song);
     this.songChart.setSong(this.song);
+    this.updateMoreSongs();
+  }
+
+  updateMoreSongs() {
+    let same_artist = this.songdat.filter(song => (
+      (song.artist == this.song.artist) && (song.track != this.song.track)
+    ))
+    if (same_artist.length == 0) {
+      this.moreby.style('display', 'none');
+    } else {
+      this.moreby.style('display', 'initial');
+      this.moreby.select('.label').text(`More by ${this.song.artist}: `);
+      this.populateSongs(this.moreby.select('.songs'), same_artist);
+    }
+
+    let cands = this.songdat.filter(song => (
+      ( (this.song.Year-song.Year) >= 0 )
+      && ( (this.song.Year - song.Year) < 3 )
+      && ( song.track != this.song.track )
+    ));
+    cands.sort( (s1, s2) => d3.descending(this.song.similarity(s1), this.song.similarity(s2)) );
+    cands = cands.slice(0, 10);
+    this.populateSongs(this.moreSongs.select('.simsongs .songs'), cands);
+    // future sims
+    cands = this.songdat.filter(song => (
+      ( (this.song.Year-song.Year) < 0 )
+      && ( (this.song.Year - song.Year) > -8 )
+      && ( song.track != this.song.track )
+    ));
+    cands.sort( (s1, s2) => d3.descending(this.song.similarity(s1), this.song.similarity(s2)) );
+    cands = cands.slice(0, 10);
+    this.populateSongs(this.moreSongs.select('.simsongs-future .songs'), cands);
   }
 
   contrastSong(song) {
