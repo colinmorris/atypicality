@@ -1,6 +1,8 @@
-import {RadarChart, SongChart} from './radar.js';
+import {RadarChart} from './radar.js';
+import {SongChart} from './song-chart.js';
 import {Song} from './song.js';
 import {typicality_cmap} from './common.js';
+import * as songdb from './song-db.js';
 
 let min_year = 1958;
 let max_year = 2016;
@@ -20,14 +22,14 @@ function years_for_decade(decade) {
 
 class SongExplorer {
 
-  constructor(songdat) {
-    this.songdat = songdat;
+  constructor() {
+    this.songdat = songdb.db;
     let rootsel = '#song-explorer'
     this.root = d3.select(rootsel)
     this.margin = {top: 20, right: 20, bottom: 50, left: 20}
 
     // default song
-    this.song = songdat[50];
+    this.song = this.songdat[50];
     this.decade = this.song.decade;
     console.log(this.decade)
     this.year = this.song.Year;
@@ -54,6 +56,10 @@ class SongExplorer {
     simsongs_future.append('span').classed('label', true).text('Similar songs (future): ');
     simsongs_future.append('span').classed('songs', true);
     this.selectSong(this.song);
+  }
+
+  onResize() {
+    this.songChart.onResize();
   }
 
   setupControls() {
@@ -173,7 +179,7 @@ class SongExplorer {
 
     let cands = this.songdat.filter(song => (
       ( (this.song.Year-song.Year) >= 0 )
-      && ( (this.song.Year - song.Year) < 3 )
+      && ( (this.song.Year - song.Year) < 8 )
       && ( song.track != this.song.track )
     ));
     cands.sort( (s1, s2) => d3.descending(this.song.similarity(s1), this.song.similarity(s2)) );
@@ -202,7 +208,7 @@ class SongExplorer {
   }
 
   static init() {
-    d3.csv('assets/number_ones.csv', Song.fromRow, dat => new SongExplorer(dat)); 
+    return new SongExplorer();
   }
 }
 

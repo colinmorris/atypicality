@@ -1,77 +1,27 @@
+import * as common from './common.js';
 
 let dimens = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
   'valence', 'danceability',
   'tempo',
 ];
 
+// Mostly copied from Table 1 of ASR paper
+// which in turn seem to be copied from API docs here:
+//      https://developer.spotify.com/web-api/get-audio-features/
+let dimen_descriptions = {
+  acousticness: 'The likelihood that this song was recorded solely by acoustic means (as opposed to more electronic means)',
+  danceability: 'How suitable is this track for dancing? Includes tempo, regularity of beat, and beat strength',
+  energy: 'A perceptual measure of intensity throughout the track. Think fast, loud and noisy (e.g. hard rock) more than dance tracks.',
+  instrumentalness: 'The likelihood that this track is predominantly instrumental. Not necessarily the inverse of speechiness.',
+  liveness: 'Detects the presence of a live audience during the recording. Heavily studio-produced tracks score low on this measure.',
+  speechiness: 'Detects the presence of spoken word throughout the track. Sung vocals are not considered spoken word.',
+  tempo: 'The overall average tempo of the track (i.e. bpm)',
+  valence: 'The musical positiveness of the track.'
+}
+
 let mean_dimens = dimens.map(s => 'mean_'+s);
 
-let contrast_color = 'red';
 
-class SongChart {
-  constructor (root, song) {
-    this.root = root;
-    this.song = song;
-    this.heading = this.root.append('div').classed('heading', true);
-    this.heading.append('h1').classed('main', true);
-    this.heading.append('h2').classed('contrast', true)
-      .style('color', contrast_color);
-    let W = 600;
-    let H = 400;
-    this.svg = this.root.append('svg')
-    .attr('width', W)
-    .attr('height', H);
-    this.radar = new RadarChart(this.svg);
-
-    this.setSong(this.song);
-  }
-
-  setSong(song) {
-    this.contrast = undefined;
-    this.sticky = false;
-    this.song = song;
-    this.updateHeading();
-    this.radar.setSong(this.song);
-  }
-
-  contrastSong (song) {
-    if (this.contrast) {
-      console.log('Clearing existing contrast song.');
-      this.decontrastSong(true);
-    }
-    this.contrast = song;
-    this.updateHeading();
-    this.radar.contrast(song);
-  }
-
-  setSticky() {
-    this.sticky = true;
-  }
-
-  updateHeading() {
-    let main = `${this.song.artist} - ${this.song.track} (${(100*this.song.typicality).toPrecision(3)}% typical)`;
-    this.heading.select('.main').text(main);
-    let con = this.heading.select('.contrast');
-    if (this.contrast) {
-      con.style('opacity', 1);
-      let sim = 100 * this.song.similarity(this.contrast);
-      let con_text = ` vs. ${this.contrast.artist} - ${this.contrast.track} (${sim.toPrecision(3)}% similar)`;
-      con.text(con_text);
-    } else {
-      con.text('|');
-      con.style('opacity', 0);
-    }
-  }
-
-  decontrastSong(force=false) {
-    if ( !this.contrast || (this.sticky && !force) ) {
-      return;
-    }
-    this.radar.dropSong(this.contrast);
-    this.contrast = undefined;
-    this.updateHeading();
-  }
-}
 
 class RadarChart {
   /* TODOS:
@@ -84,7 +34,6 @@ class RadarChart {
     this.cfg = {
       marker_radius: 5,
       base_color: 'cyan',
-      contrast_color: contrast_color
     }
     let W = this.root.attr('width');
     let H = this.root.attr('height');
@@ -123,6 +72,8 @@ class RadarChart {
     .attr('y', scale => scale.range()[1][1])
     .text((s,i) => dimens[i])
     .attr('font-size', 12)
+    .append('title')
+    .text((s,i) => dimen_descriptions[dimens[i]])
 
 
   }
@@ -133,6 +84,9 @@ class RadarChart {
   }
 
   plotPoints(g, points, color, kwargs={}) {
+    // TODO: probably nicer to do this styling stuff in css
+    let opacity = kwargs.fill_opacity || .2;
+    let highlighted_opacity = Math.min(.9, opacity*3);
     g.selectAll('circle').data(points)
     .enter()
     .append('circle')
@@ -145,7 +99,13 @@ class RadarChart {
     g.append('polygon')
     .attr('points', points.join(','))
     .attr('fill', color)
-    .attr('fill-opacity', kwargs.fill_opacity || .2)
+    .attr('fill-opacity', opacity)
+    .on('mouseover', (d,i,n) => {
+      d3.select(n[i]).attr('fill-opacity', highlighted_opacity);
+    })
+    .on('mouseout', (d,i,n) => {
+      d3.select(n[i]).attr('fill-opacity', opacity);
+    })
   }
 
   plotSong(song, main=true) {
@@ -197,7 +157,7 @@ class RadarChart {
       return;
     }
     g.selectAll('*')
-    .attr('fill', this.cfg.contrast_color)
+    .attr('fill', common.contrast_color)
   }
 
   setSong(song) {
@@ -206,4 +166,4 @@ class RadarChart {
   }
 }
 
-export {RadarChart, SongChart};
+export {RadarChart};
