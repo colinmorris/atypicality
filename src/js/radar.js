@@ -109,7 +109,7 @@ class RadarChart {
   }
 
   plotSong(song, main=true) {
-    let key = song.key;
+    let key = song.dedupe_key;
     if (this.songMap.has(key)) {
       console.warn(`Tried to plot song but key ${key} already present. Ignoring.`);
       return;
@@ -141,7 +141,7 @@ class RadarChart {
     if (typeof(song) == 'string') {
       key = song;
     } else {
-      key = song.key;
+      key = song.dedupe_key;
     }
     let ele = this.songMap.get(key);
     if (ele == undefined) {

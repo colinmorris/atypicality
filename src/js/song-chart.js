@@ -29,6 +29,7 @@ class BasicSongChart {
     .attr('width', radar_sidelen)
     .attr('height', radar_sidelen);
     this.radar = new RadarChart(this.svg);
+    this.meta_tray = this.root.append('div');
 
     this.setSong(this.song);
   }
@@ -56,6 +57,18 @@ class BasicSongChart {
     this.song = song;
     this.updateHeading();
     this.radar.setSong(this.song);
+    this.updateTray();
+  }
+
+  updateTray() {
+    this.meta_tray.text('');
+    let attrs = ['mode', 'key', 'time_signature'];
+    for (let attr of attrs) {
+      let text = `${attr}: ${this.song[attr]}`;
+      this.meta_tray.append('span')
+      .classed('meta_factoid', true)
+      .text(text)
+    }
   }
 
   updateHeading() {

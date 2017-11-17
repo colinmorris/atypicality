@@ -20,6 +20,9 @@ class Song {
     }
     s.artist = row.artist;
     s.track = row.track; // XXX
+    s.mode = row.mode;
+    s.key = row.key;
+    s.time_signature = row.time_signature;
     return s;
   }
 
@@ -40,7 +43,7 @@ class Song {
     return this.getAttrs(sonic_attrs);
   }
 
-  get key() {
+  get dedupe_key() {
     // deduping key
     return this.track;
   }
