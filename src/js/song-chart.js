@@ -74,7 +74,7 @@ class BasicSongChart {
   updateHeading() {
     let main = `${this.song.artist} - ${this.song.track} (${(100*this.song.typicality).toPrecision(3)}% typical)`;
     if (this.show_year) {
-      main = `${this.song.Year}: ${main}`;
+      main = `${this.song.year}: ${main}`;
     }
     this.heading.select('.main').text(main);
   }

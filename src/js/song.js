@@ -6,7 +6,6 @@ let sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrum
 ]
 let sonic_mean_attrs = sonic_attrs.map(s => 'mean_'+s);
 let numeric_song_attrs = [
-  //'Year', 
   'peak', 'wksonchart', 'typicality',
 ].concat(sonic_attrs).concat(sonic_mean_attrs);
 
@@ -14,7 +13,7 @@ class Song {
 
   static fromRow(row) {
     let s = new Song();
-    s.Year = +row.Year; // XXX
+    s.year = +row.Year;
     for (let attr of numeric_song_attrs) {
       s[attr] = +row[attr];
     }
@@ -27,7 +26,7 @@ class Song {
   }
 
   get decade() {
-    return this.Year - (this.Year % 10);
+    return this.year - (this.year % 10);
   }
 
   getAttrs(attrs) {

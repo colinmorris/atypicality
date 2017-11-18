@@ -32,7 +32,7 @@ class SongExplorer {
     this.song = this.songdat[50];
     this.decade = this.song.decade;
     console.log(this.decade)
-    this.year = this.song.Year;
+    this.year = this.song.year;
 
     this.setupControls();
     this.songView = this.root.append('div').classed('song-view', true);
@@ -119,7 +119,7 @@ class SongExplorer {
 
   updateSongs() {
     // Update the selectable songs corresponding to year controls
-    let songs = this.songdat.filter(song => song.Year == this.year) 
+    let songs = this.songdat.filter(song => song.year == this.year) 
     let sel = this.song_picker.selectAll('.song-selector').data(songs, song=>song.track);
 
     sel.exit().remove();
@@ -178,8 +178,8 @@ class SongExplorer {
     }
 
     let cands = this.songdat.filter(song => (
-      ( (this.song.Year-song.Year) >= 0 )
-      && ( (this.song.Year - song.Year) < 8 )
+      ( (this.song.year-song.year) >= 0 )
+      && ( (this.song.year - song.year) < 8 )
       && ( song.track != this.song.track )
     ));
     cands.sort( (s1, s2) => d3.descending(this.song.similarity(s1), this.song.similarity(s2)) );
@@ -187,8 +187,8 @@ class SongExplorer {
     this.populateSongs(this.moreSongs.select('.simsongs .songs'), cands);
     // future sims
     cands = this.songdat.filter(song => (
-      ( (this.song.Year-song.Year) < 0 )
-      && ( (this.song.Year - song.Year) > -8 )
+      ( (this.song.year-song.year) < 0 )
+      && ( (this.song.year - song.year) > -8 )
       && ( song.track != this.song.track )
     ));
     cands.sort( (s1, s2) => d3.descending(this.song.similarity(s1), this.song.similarity(s2)) );
