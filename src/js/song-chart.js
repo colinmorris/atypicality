@@ -23,15 +23,25 @@ class BasicSongChart {
       this.root.node().offsetWidth,
       window.innerHeight * .8
     );
+    radar_sidelen = Math.min(600, radar_sidelen);
 
     this.svg = this.root.append('svg')
     .classed('radar', true)
     .attr('width', radar_sidelen)
     .attr('height', radar_sidelen);
     this.radar = new RadarChart(this.svg);
-    this.meta_tray = this.root.append('div');
+    this.meta_tray = this.root.append('div').style('display', 'none');
+
+    this.debug = false;
+    this.root.on('dblclick', () => this.toggleDebug());
 
     this.setSong(this.song);
+  }
+
+  toggleDebug() {
+    console.log('toggling debug view');
+    this.debug = !this.debug;
+    this.meta_tray.style('display', this.debug ? 'initial' : 'none');
   }
 
   static for_placeholder(ele) {
@@ -62,12 +72,24 @@ class BasicSongChart {
 
   updateTray() {
     this.meta_tray.text('');
-    let attrs = ['mode', 'key', 'time_signature'];
-    for (let attr of attrs) {
-      let text = `${attr}: ${this.song[attr]}`;
-      this.meta_tray.append('span')
-      .classed('meta_factoid', true)
-      .text(text)
+    let attr_groups = [
+      ['typicality', 'typicality_all', 'typicality_orig',
+      'typical_typicality_orig',
+      'typical_typicality'],
+      common.sonic_attrs,
+      ['mode', 'raw_tempo', 'raw_key', 'raw_time_signature']
+    ];
+    for (let attrs of attr_groups) {
+      let p = this.meta_tray.append('div');
+      for (let attr of attrs) {
+        let val = this.song[attr];
+        console.assert(val != undefined, `No value found for ${attr}`);
+        console.assert(typeof(val) == 'number', `${attr} has type ${typeof(val)}, not number`);
+        let text = `${attr}: ${val.toPrecision(3)}`;
+        p.append('span')
+        .classed('meta_factoid', true)
+        .text(text)
+      }
     }
   }
 

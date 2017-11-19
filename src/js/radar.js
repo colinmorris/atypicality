@@ -1,6 +1,6 @@
 import * as common from './common.js';
 
-let dimens = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
+let dimens = ['energy', 'acousticness', 'liveness', 'speechiness', 'instrumentalness',
   'valence', 'danceability',
   'tempo',
 ];
@@ -83,10 +83,12 @@ class RadarChart {
     return attrs.map( (v, i) => this.scales[i](v));
   }
 
-  plotPoints(g, points, color, kwargs={}) {
+  plotPoints(parent, points, color, kwargs={}, cls='') {
     // TODO: probably nicer to do this styling stuff in css
-    let opacity = kwargs.fill_opacity || .2;
-    let highlighted_opacity = Math.min(.9, opacity*3);
+    // (use focal/contrast/avg classes)
+    let g = parent.append('g')
+      .classed(cls, true)
+      .classed('spiderweb', true);
     g.selectAll('circle').data(points)
     .enter()
     .append('circle')
@@ -99,13 +101,7 @@ class RadarChart {
     g.append('polygon')
     .attr('points', points.join(','))
     .attr('fill', color)
-    .attr('fill-opacity', opacity)
-    .on('mouseover', (d,i,n) => {
-      d3.select(n[i]).attr('fill-opacity', highlighted_opacity);
-    })
-    .on('mouseout', (d,i,n) => {
-      d3.select(n[i]).attr('fill-opacity', opacity);
-    })
+    return g;
   }
 
   plotSong(song, main=true) {
@@ -114,17 +110,17 @@ class RadarChart {
       console.warn(`Tried to plot song but key ${key} already present. Ignoring.`);
       return;
     }
-    let g = this.root.append('g');
-    this.songMap.set(key, g);
     let points = this.pointsForSong(song);
-    this.plotPoints(g, points, this.cfg.base_color);
+    let g = this.plotPoints(this.root, points, this.cfg.base_color, {}, 
+      main ? 'focal' : 'contrast');
+    this.songMap.set(key, g);
 
     if (main) {
-      let baseline = g.append('g').classed('baseline', 'true');
       let attrs = song.getAttrs(mean_dimens);
       let mean_points = attrs.map( (v, i) => this.scales[i](v));
-      this.plotPoints(baseline, mean_points, '#999', 
-        {radius:0, fill_opacity:.2}
+      let baseline = this.plotPoints(g, mean_points, '#999', 
+        {radius:0},
+        'baseline'
       );
     }
     return g;
@@ -152,6 +148,7 @@ class RadarChart {
   }
 
   contrast(song) {
+    // TODO: omg refactor this, this sucks
     let g = this.plotSong(song, false);
     if (g == undefined) {
       return;

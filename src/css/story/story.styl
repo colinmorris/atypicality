@@ -26,7 +26,28 @@
 .meta_factoid
   margin-right: 1rem
   font-family: monospace
-  font-size: 1rem
+  font-size: .6rem
+  display: inline-block
+
+
+.spiderweb polygon
+  fill-opacity: .2
+  &:hover
+    fill-opacity: .5
+.spiderweb circle
+  fill-opacity: .5
+
+/*
+// XXX: quick hack for browsing song radars quickly
+.spiderweb.focal
+  & circle
+  & polygon
+    fill-opacity: .02
+    &:hover
+      fill-opacity: .5
+  & .baseline polygon
+    fill-opacity: .5
+*/
 
 .picker
   a

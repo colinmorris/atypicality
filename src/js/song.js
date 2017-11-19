@@ -6,22 +6,23 @@ let sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrum
 ]
 let sonic_mean_attrs = sonic_attrs.map(s => 'mean_'+s);
 let numeric_song_attrs = [
-  'peak', 'wksonchart', 'typicality',
+  'peak', 'wksonchart', 'typicality', 'typicality_all', 'typicality_orig',
+  'mode', 'raw_key', 'raw_time_signature', 'raw_tempo',
+  'typical_typicality_orig',
+  'typical_typicality'
 ].concat(sonic_attrs).concat(sonic_mean_attrs);
 
 class Song {
 
   static fromRow(row) {
     let s = new Song();
+    // Semantics of this col not totally clear. It's not the entrance or exit year.
     s.year = +row.Year;
     for (let attr of numeric_song_attrs) {
       s[attr] = +row[attr];
     }
     s.artist = row.artist;
     s.track = row.track; // XXX
-    s.mode = row.mode;
-    s.key = row.key;
-    s.time_signature = row.time_signature;
     return s;
   }
 

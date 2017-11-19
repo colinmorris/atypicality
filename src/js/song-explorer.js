@@ -120,6 +120,7 @@ class SongExplorer {
   updateSongs() {
     // Update the selectable songs corresponding to year controls
     let songs = this.songdat.filter(song => song.year == this.year) 
+    songs.sort( (a,b) => d3.ascending(a.track, b.track));
     let sel = this.song_picker.selectAll('.song-selector').data(songs, song=>song.track);
 
     sel.exit().remove();
@@ -130,6 +131,7 @@ class SongExplorer {
 
     sel.merge(newsongs)
     .text(song=>song.track)
+    .attr('title', song => 100 * song.typicality.toPrecision(2) + '% typical')
     .style('color', song => typicality_cmap(song.typicality))
     .on('click', song => this.selectSong(song))
     .on('mouseover', song => this.contrastSong(song))
