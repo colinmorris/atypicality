@@ -81,6 +81,11 @@ class StoryTeller {
       triggerHook: 'onCenter',
       duration: 0,
     });
+    /* Assuming duration=0...
+      start is fired every time the trigger threshold is crossed (either direction)
+      enter is fired scrolling forward through it
+      leave is fired scrolling up through it
+    */
     scene.on('enter', (event) => {
       //console.debug('Entered scene with data ', dat);
       sel.classed('active', true);

@@ -16,7 +16,7 @@ let attr_texts = {
   ],
   acousticness: [
     `<b>Acousticness</b> is how likely the algorithm thinks it is that this song was recorded acoustically (i.e. without electronic instruments or effects).`,
-    `Cher's extravagantly autotuned vocals - a famous and trendsetting feature of the song - aren't fooling anyone. Not even a computer.`
+    `Cher's extravagantly autotuned vocals - a famous and trendsetting feature of the song - aren't fooling anyone. Not even a computer. This song is 0% acoustic.`
   ],
   liveness: [
     `<b>Liveness</b> is how likely the algorithm thinks it is that this song was recorded live. Again, <i>Believe</i>'s heavy-handed production leads to a very low score on this metric.`
