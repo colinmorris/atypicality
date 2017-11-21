@@ -23,9 +23,17 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
     .heading
       position static
       flex-grow .1
+      flex-shrink 1
       svg.year-slider
         width 100%
         max-height 15vh
+        min-height 0
+        flex-shrink 1
+        text.year
+          alignment-baseline middle
+      .main
+        font-size 1.5rem
+        margin-top 0
     .chart
       position static
       flex-grow .3

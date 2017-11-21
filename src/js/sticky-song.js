@@ -95,6 +95,12 @@ class YearSlider {
       //.attr('preserveAspectRatio', 'none')
       .classed('year-slider', true);
 
+    this.svg.append('defs').html(
+      `<filter x="0" y="0" width="1" height="1" id="highlight">
+        <feFlood flood-color="yellow"/>
+        <feComposite in="SourceGraphic"/>
+      </filter>`)
+
     let margin = 0;
     this.y = H * 2/3;
     let slider = this.svg.append('g')
@@ -121,6 +127,8 @@ class YearSlider {
       .classed('marker', true)
       .attr('transform', `translate(0, ${this.y})`)
     this.marker.append('text')
+      .classed('year', true)
+      .attr('filter', 'url(#highlight)')
       .attr('y', 0)
   }
 
