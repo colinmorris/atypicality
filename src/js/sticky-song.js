@@ -15,9 +15,10 @@ class StickySongGraphic {
       .classed('heading', true)
       .classed('tk-atlas', true)
       .classed('prose__hed', true)
-    this.heading.append('div')
-      .append('mark')
-      .classed('year', true)
+
+    //this.heading.append('div').append('mark').classed('year', true)
+    this.slider = new YearSlider(this.heading);
+
     this.heading.append('h3')
       .classed('main', true);
 
@@ -68,7 +69,8 @@ class StickySongGraphic {
   }
 
   setYear(year) {
-    this.heading.select('.year').text(year);
+    //this.heading.select('.year').text(year);
+    this.slider.setYear(year);
   }
 
   updateHeading() {
@@ -81,6 +83,53 @@ class StickySongGraphic {
     }
   }
 
+}
+
+class YearSlider {
+  constructor(parent) {
+    let W = 500;
+    let H = 50;
+    this.svg = parent.append('svg')
+      .attr('viewbox', `0 0 ${W} ${H}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      //.attr('preserveAspectRatio', 'none')
+      .classed('year-slider', true);
+
+    let margin = 0;
+    this.y = H * 2/3;
+    let slider = this.svg.append('g')
+    .classed('slider', true)
+    //.attr('transform', `translate(${margin}, ${this.y})`)
+    
+    this.scale = d3.scaleLinear()
+      .domain(common.year_range)
+      .range([margin, W-margin])
+
+    let track = slider.append('line')
+      .classed('track', true)
+      .attr('x1', this.scale.range()[0])
+      .attr('x2', this.scale.range()[1])
+      .attr('y1', this.y)
+      .attr('y2', this.y)
+      .attr('stroke', '#000')
+      .attr('stroke-width', 1)
+
+    //let axis = d3.axisTop(this.scale);
+    //slider.call(axis);
+
+    this.marker = this.svg.append('g')
+      .classed('marker', true)
+      .attr('transform', `translate(0, ${this.y})`)
+    this.marker.append('text')
+      .attr('y', 0)
+  }
+
+  setYear(year) {
+    let x = this.scale(year);
+    this.marker.select('text')
+      .attr('x', x)
+      .text(year)
+  }
 }
 
 export {StickySongGraphic};
