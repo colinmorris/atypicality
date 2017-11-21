@@ -109,7 +109,7 @@ class SongExplorer {
   }
 
   setYear(year) {
-    console.log('Setting year to ', year);
+    console.debug('Setting year to ', year);
     this.year = year;
     this.year_picker.selectAll('.year-selector').classed('active', year=>year==this.year);
     this.updateSongs();
