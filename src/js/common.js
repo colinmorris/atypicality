@@ -1,14 +1,17 @@
 
-let sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
+export let
+sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
   'valence', 'danceability',
   'tempo',
-]
-let typicality_cmap = d3.scaleLinear()
+],
+
+typicality_cmap = d3.scaleLinear()
   .domain([.5, 1])
   .range(["#ff00c7", "#000"])
-  .interpolate(d3.interpolateLab);
+  .interpolate(d3.interpolateLab),
+
+year_range = [1958, 2016],
 
 // Color used for 'contrasting song' in song charts
-let contrast_color = 'red';
+contrast_color = 'red';
 
-export {typicality_cmap, contrast_color,sonic_attrs};

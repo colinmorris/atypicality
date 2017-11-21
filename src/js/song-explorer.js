@@ -1,11 +1,11 @@
 import {RadarChart} from './radar.js';
 import {SongChart} from './song-chart.js';
 import {Song} from './song.js';
-import {typicality_cmap} from './common.js';
+import * as common from './common.js';
 import * as songdb from './song-db.js';
 
-let min_year = 1958;
-let max_year = 2016;
+let min_year = common.year_range[0];
+let max_year = common.year_range[1];
 let decades = [1950,1960,1970, 1980, 1990, 2000, 2010];
 
 function years_for_decade(decade) {
@@ -130,7 +130,7 @@ class SongExplorer {
     sel.merge(newsongs)
     .text(song=>song.track)
     .attr('title', song => 100 * song.typicality.toPrecision(2) + '% typical')
-    .style('color', song => typicality_cmap(song.typicality))
+    .style('color', song => common.typicality_cmap(song.typicality))
     .on('click', song => this.selectSong(song))
     .on('mouseover', song => this.contrastSong(song))
     .on('mouseout', song => this.decontrastSong())
@@ -148,7 +148,7 @@ class SongExplorer {
 
     sel.merge(newsongs)
     .text(song=>song.track)
-    .style('color', song => typicality_cmap(song.typicality))
+    .style('color', song => common.typicality_cmap(song.typicality))
     .on('click', song => this.selectSong(song))
     .on('mouseover', song => this.contrastSong(song))
     .on('mouseout', song => this.decontrastSong())

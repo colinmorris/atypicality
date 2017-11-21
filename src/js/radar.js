@@ -30,7 +30,8 @@ class RadarChart {
       base_color: 'cyan',
     }
     let viewbox = {W: 500, H: 500};
-    W = viewbox.W; H = viewbox.H;
+    let W = viewbox.W;
+    let H = viewbox.H;
     this.root.attr('viewBox', `0 0 ${viewbox.W} ${viewbox.H}`);
     this.root.attr('preserveAspectRatio', 'xMidYMid');
     this.origin = {x: W/2, y: H/2};
