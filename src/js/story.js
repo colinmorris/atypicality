@@ -1,6 +1,6 @@
 import ScrollMagic from 'scrollmagic';
 import scroll_controller from './scroll.js';
-import {SongChart} from './song-chart.js';
+import {StickySongGraphic} from './sticky-song.js';
 import {attr_texts} from './sonic-reveal.js';
 
 class StoryTeller {
@@ -11,7 +11,7 @@ class StoryTeller {
     this.root = d3.select(rootsel);
     let sticky = this.root.select('.sticky');
     this.sticky = sticky;
-    this.chart = new SongChart(sticky);
+    this.chart = new StickySongGraphic(sticky);
     // TODO: deal with showing/hiding and setting/unsetting song on enter/leave
     // (the below scene isn't really set up properly for that)
     //this.chart.setSong("Believe")
@@ -84,15 +84,17 @@ class StoryTeller {
     scene.on('enter', (event) => {
       //console.debug('Entered scene with data ', dat);
       sel.classed('active', true);
-      this.enterCbForStepdat(dat)(event);
     })
-    scene.on('leave', (event) => {
+    .on('start', this.enterCbForStepdat(dat))
+    .on('leave', (event) => {
       sel.classed('active', false);
     })
     scene.addTo(this.controller);
   }
 
   enterCbForStepdat(dat) {
+    // Called whenever we pass the trigger point for a step, whether going
+    // up or down
     return (event) => {
       this.chart.setSonicHighlight(dat.highlight_sonics);
       if (dat.song) {

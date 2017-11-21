@@ -4,6 +4,7 @@
 cf. song-repetition/src/css/story/scrolly-columns.styl
 */
 #story
+  // laid out normally then repositioned *relative to itself*
   position: relative
   width: 100%
   .sticky
@@ -18,6 +19,7 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
     // TODO: apparently a bad idea on mobile?
     height 100vh
     & .radar
+      // positioned relative to closest ancestor and 'removed from normal document flow' - no space is allocated for it
       position absolute
       top 50%
       transform translateY(-50%)
@@ -28,6 +30,7 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
     max-width: 30rem
     margin-right: 2.5%
   .is-fixed
+    // positioned relative to viewport
     position: fixed
   .is-bottom
     top: auto
@@ -48,20 +51,6 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
   width: 80%
   margin-left: 10%
 
-.radar
-  display: block
-  margin: 0 auto
-
-  & .axis
-    & text.highlight
-      fill red
-      font-weight bold
-
-  & .marker
-    fill-opacity .01
-    &.highlight
-      fill-opacity .8
-
 .songchart
   background-color: #673ab717
   .heading h3
@@ -79,24 +68,6 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
   display: inline-block
 
 
-.spiderweb polygon
-  fill-opacity: .2
-  &:hover
-    fill-opacity: .5
-.spiderweb circle
-  fill-opacity: .5
-
-/*
-// XXX: quick hack for browsing song radars quickly
-.spiderweb.focal
-  & circle
-  & polygon
-    fill-opacity: .02
-    &:hover
-      fill-opacity: .5
-  & .baseline polygon
-    fill-opacity: .5
-*/
 
 .picker
   a

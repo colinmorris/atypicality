@@ -5,7 +5,7 @@ import * as songdb from './song-db.js';
 /* Radar chart for a song plus other stuff like a title and metadata that 
    doesn't work in the radar chart (typicality, year, mode, key...)
 */
-class BasicSongChart {
+class SongChart {
   constructor (root, song, show_year=false, standalone=false) {
     this.root = root;
     this.name = root.attr('class');
@@ -20,6 +20,8 @@ class BasicSongChart {
       main_title = main_title.append('mark');
     }
     main_title.classed('main', true);
+    this.heading.append('h4').classed('contrast', true)
+      .style('color', common.contrast_color);
     let radar_sidelen = Math.min(
       this.root.node().offsetWidth,
       window.innerHeight * .8
@@ -47,34 +49,15 @@ class BasicSongChart {
     this.meta_tray.style('display', this.debug ? 'initial' : 'none');
   }
 
-  setSonicHighlight(sonics) {
-    // NB: sonics may be undefined
-    this.radar.setSonicHighlights(sonics);
-  }
-
-  showAverage(show) {
-  }
-
-  static for_placeholder(ele) {
-    let song = songdb.lookup(ele.dataset.track);
-    let show_year = ele.dataset.show_year;
-    return new BasicSongChart(d3.select(ele), song, show_year, true);
-  }
-
   onResize() {
-    // Bleh, this doesn't work because it doesn't cascade down to the axes,
+    // Bleh, this doesn't work (just resizing svg) because it doesn't cascade down to the axes,
     // polygons etc.
     return;
-    let radar_sidelen = Math.min(
-      this.root.node().offsetWidth,
-      window.innerHeight * .8
-    );
-    this.svg
-    .attr('width', radar_sidelen)
-    .attr('height', radar_sidelen);
   }
 
   setSong(song) {
+    this.contrast = undefined;
+    this.sticky = false;
     if (typeof(song) == 'string') {
       if (this.song && song == this.song.track) {
         return;
@@ -127,27 +110,6 @@ class BasicSongChart {
       main = `${this.song.year}: ${main}`;
     }
     this.heading.select('.main').text(main);
-  }
-
-}
-
-// Allows contrasts
-// TODO: this class structure is kind of silly at this point
-class SongChart extends BasicSongChart {
-  constructor(...args) {
-    super(...args);
-    this.heading.append('h4').classed('contrast', true)
-      .style('color', common.contrast_color);
-  }
-
-  setSong(song) {
-    this.contrast = undefined;
-    this.sticky = false;
-    super.setSong(song);
-  }
-
-  updateHeading() {
-    super.updateHeading();
     let con = this.heading.select('.contrast');
     if (this.contrast) {
       con.style('opacity', 1);
@@ -185,4 +147,4 @@ class SongChart extends BasicSongChart {
 
 }
 
-export {SongChart, BasicSongChart};
+export {SongChart};

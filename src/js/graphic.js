@@ -1,7 +1,6 @@
 // D3 is included by globally by default
 
 import explorer from './song-explorer.js';
-import {BasicSongChart} from './song-chart.js';
 import {StoryTeller} from './story.js';
 import scroll_controller from './scroll.js';
 
@@ -18,10 +17,6 @@ function init() {
   this.explorer = explorer.init();
   StoryTeller.init();
 
-  d3.selectAll('.songchart')
-  .each( (d,i,n) => {
-    BasicSongChart.for_placeholder(n[i]);
-  })
   // TODO: Why doesn't this woooork?
   // Basically, when developing, it's really annoying when the page refreshes
   // and jumps to wherever I was previously (or just some random point in the 

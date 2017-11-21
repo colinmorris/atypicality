@@ -42,12 +42,8 @@ class RadarChart {
       ] ])
     ))
 
+    // Map from song dedupe keys to containers for their webs
     this.songMap = new Map();
-    this.root.append('circle')
-    .attr('cx', this.origin.x)
-    .attr('cy', this.origin.y)
-    .attr('r', this.cfg.marker_radius)
-    .attr('fill', 'black');
 
     let axes = this.root.selectAll('.axis')
     .data(this.scales)
@@ -59,8 +55,6 @@ class RadarChart {
     .attr('x2', scale => scale.range()[1][0])
     .attr('y1', scale => scale.range()[0][1])
     .attr('y2', scale => scale.range()[1][1])
-    .attr('stroke-width', .5)
-    .attr('stroke', 'black')
     // labels
     this.axis_labels = axes.append('text')
     .attr('x', scale => scale.range()[1][0])
@@ -68,7 +62,6 @@ class RadarChart {
     // TODO: should just have dimension objs with name, description, scale, etc. etc.
     .datum((s,i) => dimens[i])
     .text(dim => dim)
-    .attr('font-size', 12)
     // hover text
     this.axis_labels
     .append('title')
@@ -105,7 +98,6 @@ class RadarChart {
     .enter()
     .append('circle')
     .classed('marker', true)
-    .attr('r', kwargs.radius == undefined ? this.cfg.marker_radius : kwargs.radius)
     .attr('fill', color)
     .attr('cx', d => d[0])
     .attr('cy', d => d[1])

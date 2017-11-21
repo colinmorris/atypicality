@@ -1,0 +1,45 @@
+
+.radar
+  display: block
+  margin: 0 auto
+
+  .axis
+    text
+      font-size 12
+    text.highlight
+      fill red
+      font-weight bold
+    line
+      stroke-width .5
+      stroke black
+
+  .marker
+    fill-opacity .01
+    r 5
+    &.highlight
+      fill-opacity .8
+
+.spiderweb
+  fill cyan
+  &.contrast
+    fill red
+  &.baseline
+    fill #999
+  polygon
+    fill-opacity: .2
+    &:hover
+      fill-opacity: .5
+  circle
+    fill-opacity: .5
+
+/*
+// XXX: quick hack for browsing song radars quickly
+.spiderweb.focal
+  circle
+  polygon
+    fill-opacity: .02
+    &:hover
+      fill-opacity: .5
+  .baseline polygon
+    fill-opacity: .5
+*/
