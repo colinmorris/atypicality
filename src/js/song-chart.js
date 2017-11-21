@@ -79,9 +79,11 @@ class BasicSongChart {
       song = songdb.lookup(song);
     }
     if (song == this.song) {
-      console.log(`Ignoring attempt to set song to existing value ${this.song.track} ` +
-        `on songchart ${this.name}.`
-      );
+      if (song) {
+        console.log(`Ignoring attempt to set song to existing value ${this.song.track} ` +
+          `on songchart ${this.name}.`
+        );
+      }
       return;
     }
     this.song = song;

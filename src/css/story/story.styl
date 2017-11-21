@@ -54,9 +54,13 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
 
   & .axis
     & text.highlight
-      color red
-  & .marker.highlight
-    fill-opacity .8
+      fill red
+      font-weight bold
+
+  & .marker
+    fill-opacity .01
+    &.highlight
+      fill-opacity .8
 
 .songchart
   background-color: #673ab717

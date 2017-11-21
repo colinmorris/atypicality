@@ -21,13 +21,7 @@ let dimen_descriptions = {
 
 let mean_dimens = dimens.map(s => 'mean_'+s);
 
-
-
 class RadarChart {
-  /* TODOS:
-  - baseline (i.e. avg. per attr)
-  - hover effects
-  */
 
   constructor(root) {
     this.root = root;
@@ -67,15 +61,33 @@ class RadarChart {
     .attr('y2', scale => scale.range()[1][1])
     .attr('stroke-width', .5)
     .attr('stroke', 'black')
-    axes.append('text')
+    // labels
+    this.axis_labels = axes.append('text')
     .attr('x', scale => scale.range()[1][0])
     .attr('y', scale => scale.range()[1][1])
-    .text((s,i) => dimens[i])
+    // TODO: should just have dimension objs with name, description, scale, etc. etc.
+    .datum((s,i) => dimens[i])
+    .text(dim => dim)
     .attr('font-size', 12)
+    // hover text
+    this.axis_labels
     .append('title')
     .text((s,i) => dimen_descriptions[dimens[i]])
 
+  }
 
+  setSonicHighlights(sonics) {
+    if (sonics) {
+      console.debug(`Setting sonic highlights to ${sonics}`);
+    }
+    sonics = sonics ? sonics.split(' ') : [];
+    this.axis_labels.classed('highlight', dim => sonics.includes(dim));
+
+    this.root.selectAll('.marker')
+      .classed('highlight', (pt, i) => {
+        let dim = dimens[i];
+        return sonics.includes(dim);
+      })
   }
 
   pointsForSong(song) {

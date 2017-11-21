@@ -15,6 +15,9 @@ class StoryTeller {
     // TODO: deal with showing/hiding and setting/unsetting song on enter/leave
     // (the below scene isn't really set up properly for that)
     this.chart.setSong("Believe")
+    // NB: important to do this *before* setting up scene, so that the calculated
+    // height of the root node includes the text added here.
+    this.setupSonicIntro();
     let viewportHeight = window.innerHeight;
     // The 'overall' scene during which the sticky graphic is pinned.
     // Contains a whole bunch of inner scenes that describe all the 
@@ -25,14 +28,14 @@ class StoryTeller {
       duration: Math.max(1, this.root.node().offsetHeight - viewportHeight)
     })
     .on('enter', () => {
+      console.debug('Pinning story div');
       this.toggleFixed(true, false);
     })
     .on('leave', (e) => {
-      this.chart.setSong();
+      console.log('Unpinning story div');
       this.toggleFixed(false, e.scrollDirection === 'FORWARD');
     })
     .addTo(this.controller)
-    this.setupSonicIntro();
     this.setupScenes();
   }
 
@@ -79,8 +82,9 @@ class StoryTeller {
       duration: 0,
     });
     scene.on('enter', (event) => {
-      console.debug('Entered scene with data ', dat);
+      //console.debug('Entered scene with data ', dat);
       sel.classed('active', true);
+      this.enterCbForStepdat(dat)(event);
     })
     scene.on('leave', (event) => {
       sel.classed('active', false);
