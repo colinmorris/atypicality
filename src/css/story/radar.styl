@@ -20,11 +20,19 @@
       fill-opacity .8
 
 .spiderweb
+  // primary song
   fill cyan
+  // another song temporarily contrasted with primary song
   &.contrast
     fill red
+  // 'avg song' baseline blob
   &.baseline
     fill #999
+    &.hidden
+      fill #9990
+  // temporarily drawing attention to a particular web
+  &.highlight polygon
+    fill-opacity .6
   polygon
     fill-opacity: .2
     &:hover

@@ -74,6 +74,7 @@ class StoryTeller {
     newsong
     highlight_sonics
     hide_avg
+    show_avg
     */
     let sel = d3.select(node);
     let scene = new ScrollMagic.Scene({
@@ -103,7 +104,8 @@ class StoryTeller {
     .on('leave', (event) => {
       sel.classed('active', false);
     })
-    scene.addTo(this.controller);
+    .on('leave', this.leaveCbForStepdat(dat))
+    .addTo(this.controller);
   }
 
   enterCbForStepdat(dat) {
@@ -114,7 +116,21 @@ class StoryTeller {
       if (dat.song) {
         this.chart.transitionSong(dat.song);
       }
-      this.chart.showAverage(!dat.hide_avg);
+      if (dat.hide_avg || dat.show_avg) {
+        let show = dat.show_avg;
+        this.chart.showAverage(show);
+      }
+      if (dat.highlight_web) {
+        this.chart.highlightWeb(dat.highlight_web);
+      }
+    }
+  }
+
+  leaveCbForStepdat(dat) {
+    return (event) => {
+      if (dat.highlight_web) {
+        this.chart.clearWebHighlights();
+      }
     }
   }
 

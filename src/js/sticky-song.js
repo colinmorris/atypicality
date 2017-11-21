@@ -39,6 +39,18 @@ class StickySongGraphic {
   }
 
   showAverage(show) {
+    // NB: this won't persist through song changes
+    this.radar.root.select('.baseline')
+      .classed('hidden', !show);
+  }
+
+  highlightWeb(cls) {
+    this.radar.root.select('.spiderweb.' + cls)
+      .classed('highlight', true);
+  }
+  clearWebHighlights() {
+    this.radar.root.selectAll('.spiderweb.highlight')
+      .classed('highlight', false);
   }
 
   setSong(song) {
