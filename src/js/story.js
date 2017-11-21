@@ -79,18 +79,27 @@ class StoryTeller {
     let scene = new ScrollMagic.Scene({
       triggerElement: node,
       triggerHook: 'onCenter',
-      duration: 0,
+      duration: node.offsetHeight,
     });
     /* Assuming duration=0...
       start is fired every time the trigger threshold is crossed (either direction)
       enter is fired scrolling forward through it
       leave is fired scrolling up through it
+    With duration > 0...
+      enter: entering the trigger region. scrolling down through start point or up
+            through end point
+      leave: exiting the trigger region, as above
+      start: scrolling past start position (either direction)
+      end: scrolling past end position (either direction)
     */
     scene.on('enter', (event) => {
       //console.debug('Entered scene with data ', dat);
       sel.classed('active', true);
+      this.enterCbForStepdat(dat)(event);
     })
-    .on('start', this.enterCbForStepdat(dat))
+    //.on('start', this.enterCbForStepdat(dat))
+    // XXX: If steps end up not tiling vertical plane may need to also add leave callbacks
+    // for certain step data attrs
     .on('leave', (event) => {
       sel.classed('active', false);
     })
