@@ -134,9 +134,22 @@ class YearSlider {
 
   setYear(year) {
     let x = this.scale(year);
-    this.marker.select('text')
-      .attr('x', x)
+    if (!this.year_set) {
+      this.year_set = true;
+      this.marker.select('text')
+        .attr('x', x)
+        .text(year)
+    } else {
+      // TODO: would be really cool to have the text flip through the intermediate
+      // years during transition
+      this.marker.select('text')
       .text(year)
+      .transition('yearswing')
+      .duration(1500)
+      .ease(d3.easeCubic)
+      .attr('x', x)
+      //.on('end', function() { d3.select(this).text(year); })
+    }
   }
 }
 
