@@ -13,7 +13,6 @@ function resize() {
 resize = resize.bind(glob);
 
 function init() {
-  console.log('Make something awesome!');
   this.explorer = explorer.init();
   StoryTeller.init();
 
