@@ -30,7 +30,13 @@ let attr_texts = {
   valence: [
     `Finally, <b>valence</b> is one of the most high-level, abstract features used. It represents the "positiveness" of the track. That is, is listening to it likely to make you happy? Or does it have more of a sad, dark vibe?`,
     // Major except the bridge?
-    `<i>Believe</i> gets a slightly below average 48% valence score. We might agree with that based on the lyrics ("I really don't think it's strong enough"), but the algorithm only has access to the raw audio of the song, not the liner notes. Its assessment of valence comes from the song's sound. <i>Believe</i> is actually in a major key, but it doesn't sound like sunshine and rainbows. Maybe there's just something unsettling about the alien, unabashedly artificial sound of those synth pads? Or maybe it's something in the harmonies. The arpeggiated chord played after the first line of the chorus sounds a bit wonky: it's a major seventh, inverted such that the first two notes are separated by a semitone - an extremely dissonant interval.`
+    `<i>Believe</i> gets a slightly below average 48% valence score. We might agree with that based on the lyrics ("I really don't think it's strong enough"), but the algorithm only has access to the raw audio of the song, not the liner notes. Its assessment of valence comes from the song's sound.`,
+   `I would tend to agree that <i>Believe</i> doesn't sound like sunshine and rainbows, but it's hard to say exactly why. It's commonly observed that songs in a 
+      <a href="https://www.youtube.com/watch?v=-9YopDo5_xU">major key</a>
+      tend to sound more upbeat and positive than those written in a 
+      <a href="https://www.youtube.com/watch?v=jcA--c2U4Wg">minor key</a>,
+      but <i>Believe</i> is in the key of G major, so the answer isn't that simple.`,
+      `Maybe there's just something unsettling about the alien, artificial sound of those synth pads? Or maybe it's something in the harmonies. The arpeggiated chord played after the first line of the chorus sounds a bit wonky: it's a major seventh, inverted such that the first two notes are separated by a semitone - an extremely dissonant interval. Or maybe it's just Cher's creepy robot voice.`
     // Other Cher songs that share this property. Half-breed. Dark lady.
   ]
 }
