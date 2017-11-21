@@ -14,7 +14,7 @@ class StoryTeller {
     this.chart = new SongChart(sticky);
     // TODO: deal with showing/hiding and setting/unsetting song on enter/leave
     // (the below scene isn't really set up properly for that)
-    this.chart.setSong("Believe")
+    //this.chart.setSong("Believe")
     // NB: important to do this *before* setting up scene, so that the calculated
     // height of the root node includes the text added here.
     this.setupSonicIntro();
@@ -95,8 +95,8 @@ class StoryTeller {
   enterCbForStepdat(dat) {
     return (event) => {
       this.chart.setSonicHighlight(dat.highlight_sonics);
-      if (dat.newsong) {
-        this.chart.transitionSong(dat.newsong);
+      if (dat.song) {
+        this.chart.transitionSong(dat.song);
       }
       this.chart.showAverage(!dat.hide_avg);
     }
