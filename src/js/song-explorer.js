@@ -158,7 +158,7 @@ class SongExplorer {
   }
 
   selectSong(song) {
-    console.log(`Setting song to ${song.track}`)
+    console.debug(`Setting song to ${song.track}`)
     this.song = song;
     this.song_picker.selectAll('.song-selector').classed('active', song => song==this.song);
     this.songChart.setSong(this.song);
