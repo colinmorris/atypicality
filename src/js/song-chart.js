@@ -2,14 +2,15 @@ import {RadarChart} from './radar.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
 
-/* Radar chart for a song plus other stuff like a title and metadata that 
-   doesn't work in the radar chart (typicality, year, mode, key...)
+/*
+Used in SongExplorer.
+Radar chart + a bit of song metadata and bookkeeping.
+Kind of a leaky/weak abstraction.
 */
 class SongChart {
-  constructor (root, song, show_year=false, standalone=false) {
+  constructor (root, show_year=false, standalone=false) {
     this.root = root;
     this.name = root.attr('class');
-    this.song = song;
     this.show_year = show_year;
     this.heading = this.root.append('div')
       .classed('heading', true)
@@ -37,10 +38,6 @@ class SongChart {
 
     this.debug = false;
     this.root.on('dblclick', () => this.toggleDebug());
-
-    if (this.song) {
-      this.setSong(this.song);
-    }
   }
 
   toggleDebug() {
@@ -129,7 +126,7 @@ class SongChart {
     }
     this.contrast = song;
     this.updateHeading();
-    this.radar.contrast(song);
+    this.radar.plotSong(song, 'contrast');
   }
 
   decontrastSong(force=false) {

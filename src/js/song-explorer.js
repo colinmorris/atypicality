@@ -28,15 +28,13 @@ class SongExplorer {
     this.root = d3.select(rootsel);
     this.margin = {top: 20, right: 20, bottom: 50, left: 20};
 
-    // default song
-    this.song = this.songdat[50];
-    this.decade = this.song.decade;
-    console.log(this.decade)
-    this.year = this.song.year;
+    let default_song = this.songdat[50];
+    this.decade = default_song.decade;
+    this.year = default_song.year;
 
     this.setupControls();
     this.songView = this.root.append('div').classed('song-view', true);
-    this.songChart = new SongChart(this.songView, this.song);
+    this.songChart = new SongChart(this.songView);
     this.moreSongs = this.root.append('div')
     let moreby = this.moreSongs.append('div')
       .classed('moreby', true)
@@ -55,7 +53,7 @@ class SongExplorer {
       .classed('picker', true)
     simsongs_future.append('span').classed('label', true).text('Similar songs (future): ');
     simsongs_future.append('span').classed('songs', true);
-    this.selectSong(this.song);
+    this.selectSong(default_song);
   }
 
   onResize() {

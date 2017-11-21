@@ -88,9 +88,10 @@ class RadarChart {
     return attrs.map( (v, i) => this.scales[i](v));
   }
 
-  plotPoints(parent, points, color, kwargs={}, cls='') {
-    // TODO: probably nicer to do this styling stuff in css
-    // (use focal/contrast/avg classes)
+  _plotPoints(parent, points, cls='') {
+    /* Make a spiderweb for the given points in a container created in the
+    given parent selection, then return that container.
+    */
     let g = parent.append('g')
       .classed(cls, true)
       .classed('spiderweb', true);
@@ -98,34 +99,27 @@ class RadarChart {
     .enter()
     .append('circle')
     .classed('marker', true)
-    .attr('fill', color)
     .attr('cx', d => d[0])
     .attr('cy', d => d[1])
-    .attr('fill-opacity', .5)
     g.append('polygon')
     .attr('points', points.join(','))
-    .attr('fill', color)
     return g;
   }
 
-  plotSong(song, main=true) {
+  plotSong(song, cls='focal') {
     let key = song.dedupe_key;
     if (this.songMap.has(key)) {
       console.warn(`Tried to plot song but key ${key} already present. Ignoring.`);
       return;
     }
     let points = this.pointsForSong(song);
-    let g = this.plotPoints(this.root, points, this.cfg.base_color, {}, 
-      main ? 'focal' : 'contrast');
+    let g = this._plotPoints(this.root, points, cls);
     this.songMap.set(key, g);
 
-    if (main) {
+    if (cls=='focal') {
       let attrs = song.getAttrs(mean_dimens);
       let mean_points = attrs.map( (v, i) => this.scales[i](v));
-      let baseline = this.plotPoints(g, mean_points, '#999', 
-        {radius:0},
-        'baseline'
-      );
+      let baseline = this._plotPoints(g, mean_points, 'baseline');
     }
     return g;
   }
@@ -137,6 +131,8 @@ class RadarChart {
   }
 
   dropSong(song) {
+    /* Remove the spiderwebs for the given song, if present.
+    */
     let key;
     if (typeof(song) == 'string') {
       key = song;
@@ -151,14 +147,9 @@ class RadarChart {
     this.songMap.delete(key);
   }
 
+  // Not used, I think?
   contrast(song) {
-    // TODO: omg refactor this, this sucks
-    let g = this.plotSong(song, false);
-    if (g == undefined) {
-      return;
-    }
-    g.selectAll('*')
-    .attr('fill', common.contrast_color)
+    this.plotSong(song, 'contrast');
   }
 
   setSong(song) {
