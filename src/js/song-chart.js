@@ -8,6 +8,7 @@ import * as songdb from './song-db.js';
 class BasicSongChart {
   constructor (root, song, show_year=false, standalone=false) {
     this.root = root;
+    this.name = root.attr('class');
     this.song = song;
     this.show_year = show_year;
     this.heading = this.root.append('div')
@@ -35,13 +36,23 @@ class BasicSongChart {
     this.debug = false;
     this.root.on('dblclick', () => this.toggleDebug());
 
-    this.setSong(this.song);
+    if (this.song) {
+      this.setSong(this.song);
+    }
   }
 
   toggleDebug() {
     console.log('toggling debug view');
     this.debug = !this.debug;
     this.meta_tray.style('display', this.debug ? 'initial' : 'none');
+  }
+
+  setSonicHighlight(sonics) {
+    // NB: sonics may be undefined
+    this.radar.setSonicHighlights(sonics);
+  }
+
+  showAverage(show) {
   }
 
   static for_placeholder(ele) {
@@ -64,10 +75,27 @@ class BasicSongChart {
   }
 
   setSong(song) {
+    if (typeof(song) == 'string') {
+      song = songdb.lookup(song);
+    }
+    if (song == this.song) {
+      console.log(`Ignoring attempt to set song to existing value ${this.song.track} ` +
+        `on songchart ${this.name}.`
+      );
+      return;
+    }
     this.song = song;
-    this.updateHeading();
     this.radar.setSong(this.song);
-    this.updateTray();
+    // TODO: lazy quick fix
+    if (this.song) {
+      this.updateHeading();
+      this.updateTray();
+    }
+  }
+
+  transitionSong(song) {
+    // TODO
+    this.setSong(song);
   }
 
   updateTray() {
@@ -104,6 +132,7 @@ class BasicSongChart {
 }
 
 // Allows contrasts
+// TODO: this class structure is kind of silly at this point
 class SongChart extends BasicSongChart {
   constructor(...args) {
     super(...args);

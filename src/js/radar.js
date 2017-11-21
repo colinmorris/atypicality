@@ -159,7 +159,9 @@ class RadarChart {
 
   setSong(song) {
     this.clear();
-    this.plotSong(song);
+    if (song) {
+      this.plotSong(song);
+    }
   }
 }
 

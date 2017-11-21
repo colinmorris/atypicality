@@ -45,6 +45,7 @@
     "request": "^2.81.0",
     "require-dir": "^0.3.2",
     "run-sequence": "^2.1.0",
+    "scrollmagic": "^2.0.5",
     "source-map": "^0.5.7",
     "superagent": "^3.6.0",
     "webpack": "^3.5.6",

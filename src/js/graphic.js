@@ -2,6 +2,8 @@
 
 import explorer from './song-explorer.js';
 import {BasicSongChart} from './song-chart.js';
+import {StoryTeller} from './story.js';
+import scroll_controller from './scroll.js';
 
 let glob = {};
 
@@ -14,11 +16,27 @@ resize = resize.bind(glob);
 function init() {
   console.log('Make something awesome!');
   this.explorer = explorer.init();
+  StoryTeller.init();
 
   d3.selectAll('.songchart')
   .each( (d,i,n) => {
     BasicSongChart.for_placeholder(n[i]);
   })
+  // TODO: Why doesn't this woooork?
+  // Basically, when developing, it's really annoying when the page refreshes
+  // and jumps to wherever I was previously (or just some random point in the 
+  // middle of the page), because usually I want to debug from the top.
+  //scroll_controller.scrollTo('.intro');
+
+  // Found in comment on this answer: https://stackoverflow.com/a/18633915/262271
+  // Seems like the way this works is it causes the window to scroll to the top
+  // just before a refresh happens, which means the scroll position the browser
+  // remembers to return to after refresh is just the top. Neat.
+  window.onbeforeunload = function() {
+    window.scrollTo(0, 0);
+  }
+  // Ugh, but for some reason it seems this doesn't work with 
+  // whatever browserify autorefresh thing? bleh.
 }
 init = init.bind(glob)
 
