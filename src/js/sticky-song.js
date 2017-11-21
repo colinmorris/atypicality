@@ -20,17 +20,11 @@ class StickySongGraphic {
       .classed('year', true)
     this.heading.append('h3')
       .classed('main', true);
-    let radar_sidelen = Math.min(
-      this.root.node().offsetWidth,
-      window.innerHeight * .8
-    );
-    radar_sidelen = Math.min(600, radar_sidelen);
 
-    this.svg = this.root.append('svg')
+    let chart = this.root.append('div').classed('chart', true);
+    this.svg = chart.append('svg')
     .classed('radar', true)
-    .attr('width', radar_sidelen)
-    .attr('height', radar_sidelen);
-    this.radar = new RadarChart(this.svg);
+    this.radar = new RadarChart(this.svg, chart);
   }
 
   setSonicHighlight(sonics) {

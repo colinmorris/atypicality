@@ -7,7 +7,11 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
   width: 100%
   .sticky
     width 60%
+    // positioned relative to closest ancestor and 'removed from normal document flow' - no space is allocated for it
     position absolute
+    display flex
+    flex-direction column
+    justify-content start
     top 0
     left 0
     bottom auto
@@ -16,11 +20,17 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
     transform translate3d(0, 0, 0)
     // TODO: apparently a bad idea on mobile?
     height 100vh
-    & .radar
-      // positioned relative to closest ancestor and 'removed from normal document flow' - no space is allocated for it
-      position absolute
-      top 50%
-      transform translateY(-50%)
+    .heading
+      position static
+      flex-grow .1
+    .chart
+      position static
+      flex-grow .3
+      flex-shrink 1
+      min-height 0
+      svg
+        max-height 80vh
+        min-height 0
 
   .scrolltext
     position: relative

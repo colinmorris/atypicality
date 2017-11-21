@@ -69,8 +69,8 @@ class StoryTeller {
 
   addSceneForStep(dat, node) {
     /* Step data attrs to deal with
-    clearsong
-    pad
+    *clearsong
+    *pad
     newsong
     highlight_sonics
     hide_avg

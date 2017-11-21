@@ -29,8 +29,10 @@ class RadarChart {
       marker_radius: 5,
       base_color: 'cyan',
     }
-    let W = this.root.attr('width');
-    let H = this.root.attr('height');
+    let viewbox = {W: 500, H: 500};
+    W = viewbox.W; H = viewbox.H;
+    this.root.attr('viewBox', `0 0 ${viewbox.W} ${viewbox.H}`);
+    this.root.attr('preserveAspectRatio', 'xMidYMid');
     this.origin = {x: W/2, y: H/2};
     let radius = Math.min(W, H) * .45;
     this.scales = dimens.map( (dim, i) => (
