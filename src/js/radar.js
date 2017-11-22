@@ -99,6 +99,13 @@ class RadarChart {
       })
   }
 
+  unsetSonicHighlights(sonics) {
+    sonics = sonics ? sonics.split(' ') : [];
+    this.axis_labels.selectAll('.highlight')
+      .classed('highlight', dim => !sonics.includes(dim));
+
+  }
+
   _pointsForSong(song, baseline=false) {
     let dims = baseline ? mean_dimens : dimens;
     let attrs = song.getAttrs(dims);

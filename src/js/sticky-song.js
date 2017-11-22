@@ -29,7 +29,6 @@ class StickySongGraphic {
   }
 
   setSonicHighlight(sonics) {
-    // NB: sonics may be undefined
     this.radar.setSonicHighlights(sonics);
   }
 

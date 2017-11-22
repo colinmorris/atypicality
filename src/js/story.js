@@ -141,7 +141,8 @@ class StoryTeller {
         this.chart.clearWebHighlights();
       }
       if (dat.highlight_sonics) {
-        this.chart.setSonicHighlight('');
+        //this.chart.setSonicHighlight('');
+        this.chart.unsetSonicHighlight(dat.highlight_sonics);
       }
     }
   }
