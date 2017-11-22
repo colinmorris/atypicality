@@ -62,6 +62,27 @@ class RadarChart {
     .append('title')
     .text((s,i) => dimen_descriptions[dimens[i]])
 
+    // So that we always have a web of each class to reuse for transitions.
+    this._setupDummyWebs();
+  }
+
+  _dummify(cls) {
+    let kwargs = {
+      duration: 1000,
+      ease: d3.easeCubicIn
+    };
+    this._transitionPoints(this._dummyPoints, this.getWeb(cls), kwargs);
+  }
+
+  get _dummyPoints() {
+    let dummy = new Array(dimens.length).fill(0);
+    return dummy.map( (v, i) => this.scales[i](v));
+  }
+
+  _setupDummyWebs() {
+    this._plotPoints(this.root, this._dummyPoints, 'contrast');
+    let g = this._plotPoints(this.root, this._dummyPoints, 'focal');
+    this._plotPoints(g, this._dummyPoints, 'baseline');
   }
 
   setSonicHighlights(sonics) {
@@ -71,7 +92,7 @@ class RadarChart {
     sonics = sonics ? sonics.split(' ') : [];
     this.axis_labels.classed('highlight', dim => sonics.includes(dim));
 
-    this.root.selectAll('.marker')
+    this.root.selectAll('.focal .marker')
       .classed('highlight', (pt, i) => {
         let dim = dimens[i];
         return sonics.includes(dim);
@@ -102,8 +123,7 @@ class RadarChart {
     return g;
   }
 
-  _transitionPoints(points, g) {
-    let dur = 1000;
+  _transitionPoints(points, g, kwargs={}) {
     // uggggh
     let classes = g.attr('class').split(' ');
     let identifying_cls;
@@ -113,11 +133,14 @@ class RadarChart {
         break;
       }
     }
+    let dur = kwargs.duration || 1000;
+    let ease = kwargs.ease || d3.easeCubic;
     console.assert(identifying_cls);
     this.root.selectAll(`.spiderweb.${identifying_cls} > circle.marker`)
       .data(points)
       .transition()
       .duration(dur)
+      .ease(ease)
       .attr('cx', d=>d[0])
       .attr('cy', d=>d[1])
 
@@ -127,6 +150,9 @@ class RadarChart {
     .attr('points', points.join(','))
   }
   
+  getWeb(cls) {
+    return this.root.select('.spiderweb.'+cls);
+  }
   getWebs(cls) {
     return this.root.selectAll('.spiderweb.'+cls);
   }
@@ -146,6 +172,7 @@ class RadarChart {
         this._transitionPoints(mean_points, baseline_container)
       }
     } else {
+      console.log(`No web found of cls ${cls}, so making one from scratch.`);
       g = this._plotPoints(this.root, points, cls);
       if (cls=='focal') {
         let mean_points = this._pointsForSong(song, true);
@@ -157,11 +184,13 @@ class RadarChart {
   }
 
   clear() {
+    console.warn('u sure u wanna clear?');
     this.root.selectAll('.spiderweb').remove();
   }
 
   decontrast() {
-    this.root.selectAll('.spiderweb.contrast').remove();
+    this._dummify('contrast');
+    //this.root.selectAll('.spiderweb.contrast').remove();
   }
 
   // Not used, I think?
@@ -175,8 +204,10 @@ class RadarChart {
     }
   }
 
+  // deprecated
   setSong(song) {
-    this.clear();
+    // XXX: dummify
+    //this.clear();
     if (song) {
       this.plotSong(song);
     }

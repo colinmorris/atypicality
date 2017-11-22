@@ -53,6 +53,11 @@ class SongChart {
   }
 
   setSong(song) {
+    // ???
+    // maybe need to do some debouncing magic here.
+    // specifically for the case of clicking on the 'more songs' links in the bottom
+    // of the SongExplorer widget, since that can change the link you're hovering over
+    this.decontrastSong()
     this.contrast = undefined;
     this.sticky = false;
     if (typeof(song) == 'string') {
@@ -64,6 +69,7 @@ class SongChart {
     if (song == this.song) {
       return;
     }
+
     this.song = song;
     this.radar.setSong(this.song);
     // TODO: lazy quick fix
@@ -122,8 +128,8 @@ class SongChart {
   contrastSong (song) {
     // Precondition: song is not already plotted (checked in song-explorer.js)
     if (this.contrast) {
-      console.log('Clearing existing contrast song.');
-      this.decontrastSong(true);
+      //console.log('Clearing existing contrast song.');
+      //this.decontrastSong(true);
     }
     this.contrast = song;
     this.updateHeading();
