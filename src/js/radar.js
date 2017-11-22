@@ -45,6 +45,7 @@ class RadarChart {
     .enter()
     .append('g')
     .classed('axis', true);
+    this.axes = axes;
     axes.append('line')
     .attr('x1', scale => scale.range()[0][0])
     .attr('x2', scale => scale.range()[1][0])
@@ -101,8 +102,13 @@ class RadarChart {
 
   unsetSonicHighlights(sonics) {
     sonics = sonics ? sonics.split(' ') : [];
-    this.axis_labels.selectAll('.highlight')
+    this.axes.selectAll('text.highlight')
       .classed('highlight', dim => !sonics.includes(dim));
+    this.root.selectAll('.focal .marker')
+      .classed('highlight', (pt, i, nodes) => {
+        let dim = dimens[i];
+        return !sonics.includes(dim) && d3.select(nodes[i]).classed('highlight');
+      })
 
   }
 
