@@ -6,9 +6,11 @@
 
   .axis
     text
-      font-size 12
+      font-size 14px
+      $d = 1s
+      transition font-size $d, font-weight $d
     text.highlight
-      fill red
+      font-size 18px
       font-weight bold
     line
       stroke-width .5
@@ -30,15 +32,20 @@
   &.baseline
     fill #999
     &.hidden
-      fill #9990
+      //fill #9990
+      polygon, circle
+        fill-opacity 0
   // temporarily drawing attention to a particular web
   &.highlight polygon
     fill-opacity .6
+  $d = 1s
   polygon
+    transition fill-opacity $d*2
     fill-opacity: .2
     &:hover
       fill-opacity: .5
   circle
+    transition fill-opacity $d
     fill-opacity: .5
 
 /*

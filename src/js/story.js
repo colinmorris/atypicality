@@ -2,6 +2,7 @@ import ScrollMagic from 'scrollmagic';
 import scroll_controller from './scroll.js';
 import {StickySongGraphic} from './sticky-song.js';
 import {attr_texts} from './sonic-reveal.js';
+import * as common from './common.js';
 
 class StoryTeller {
 
@@ -46,7 +47,11 @@ class StoryTeller {
 
   setupSonicIntro() {
     let root = this.root.select('#sonicreveal');
-    for (let attr in attr_texts) {
+    let j;
+    for (let i = 0; i < common.sonic_attrs.length; i++) {
+      // start on danceability (i.e. the top)
+      j = (i + 6) % common.sonic_attrs.length;
+      let attr = common.sonic_attrs[j];
       let div = root.append('div')
         .classed('step', true)
         .attr('data-hide_avg', '1')
@@ -113,9 +118,12 @@ class StoryTeller {
     // Called whenever we pass the trigger point for a step, whether going
     // up or down
     return (event) => {
-      this.chart.setSonicHighlight(dat.highlight_sonics);
+      // NB: important to do this one first
       if (dat.song) {
         this.chart.transitionSong(dat.song);
+      }
+      if (dat.highlight_sonics) {
+        this.chart.setSonicHighlight(dat.highlight_sonics);
       }
       if (dat.hide_avg || dat.show_avg) {
         let show = dat.show_avg;
@@ -131,6 +139,9 @@ class StoryTeller {
     return (event) => {
       if (dat.highlight_web) {
         this.chart.clearWebHighlights();
+      }
+      if (dat.highlight_sonics) {
+        this.chart.setSonicHighlight('');
       }
     }
   }

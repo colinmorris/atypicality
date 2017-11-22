@@ -1,8 +1,8 @@
 
 export let
-sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
-  'valence', 'danceability',
-  'tempo',
+sonic_attrs = [
+  'energy', 'acousticness', 'liveness', 'speechiness', 'instrumentalness',
+  'valence', 'danceability', 'tempo'
 ],
 
 typicality_cmap = d3.scaleLinear()
