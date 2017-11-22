@@ -1,9 +1,6 @@
 import * as common from './common.js';
 
-let dimens = ['energy', 'acousticness', 'liveness', 'speechiness', 'instrumentalness',
-  'valence', 'danceability',
-  'tempo',
-];
+let dimens = common.sonic_attrs;
 
 // Mostly copied from Table 1 of ASR paper
 // which in turn seem to be copied from API docs here:
@@ -21,14 +18,12 @@ let dimen_descriptions = {
 
 let mean_dimens = dimens.map(s => 'mean_'+s);
 
+let web_classes = ['focal', 'baseline', 'contrast'];
+
 class RadarChart {
 
   constructor(root) {
     this.root = root;
-    this.cfg = {
-      marker_radius: 5,
-      base_color: 'cyan',
-    }
     let viewbox = {W: 500, H: 500};
     let W = viewbox.W;
     let H = viewbox.H;
@@ -44,9 +39,6 @@ class RadarChart {
         this.origin.y + radius * (Math.sin(i*2*Math.PI / dimens.length))
       ] ])
     ))
-
-    // Map from song dedupe keys to containers for their webs
-    this.songMap = new Map();
 
     let axes = this.root.selectAll('.axis')
     .data(this.scales)
@@ -86,8 +78,9 @@ class RadarChart {
       })
   }
 
-  pointsForSong(song) {
-    let attrs = song.getAttrs(dimens);
+  _pointsForSong(song, baseline=false) {
+    let dims = baseline ? mean_dimens : dimens;
+    let attrs = song.getAttrs(dims);
     return attrs.map( (v, i) => this.scales[i](v));
   }
 
@@ -109,50 +102,77 @@ class RadarChart {
     return g;
   }
 
-  plotSong(song, cls='focal') {
-    let key = song.dedupe_key;
-    if (this.songMap.has(key)) {
-      console.warn(`Tried to plot song but key ${key} already present. Ignoring.`);
-      return;
+  _transitionPoints(points, g) {
+    let dur = 1000;
+    // uggggh
+    let classes = g.attr('class').split(' ');
+    let identifying_cls;
+    for (let cls of classes) {
+      if (web_classes.includes(cls)) {
+        identifying_cls = cls;
+        break;
+      }
     }
-    let points = this.pointsForSong(song);
-    let g = this._plotPoints(this.root, points, cls);
-    this.songMap.set(key, g);
+    console.assert(identifying_cls);
+    this.root.selectAll(`.spiderweb.${identifying_cls} > circle.marker`)
+      .data(points)
+      .transition()
+      .duration(dur)
+      .attr('cx', d=>d[0])
+      .attr('cy', d=>d[1])
 
-    if (cls=='focal') {
-      let attrs = song.getAttrs(mean_dimens);
-      let mean_points = attrs.map( (v, i) => this.scales[i](v));
-      let baseline = this._plotPoints(g, mean_points, 'baseline');
+    g.select('polygon')
+    .transition()
+    .duration(dur)
+    .attr('points', points.join(','))
+  }
+  
+  getWebs(cls) {
+    return this.root.selectAll('.spiderweb.'+cls);
+  }
+
+  plotSong(song, cls='focal') {
+    /* Plot the given song in a spiderweb having the given class.
+    If one already exists, reuse the elements and transition the points
+    to their new positions.
+    */
+    let points = this._pointsForSong(song);
+    let g = this.root.select('.spiderweb.'+cls)
+    if (!g.empty()) {
+      this._transitionPoints(points, g);
+      if (cls=='focal') {
+        let mean_points = this._pointsForSong(song, true);
+        let baseline_container = g.select('.baseline');
+        this._transitionPoints(mean_points, baseline_container)
+      }
+    } else {
+      g = this._plotPoints(this.root, points, cls);
+      if (cls=='focal') {
+        let mean_points = this._pointsForSong(song, true);
+        let baseline = this._plotPoints(g, mean_points, 'baseline');
+      }
     }
+
     return g;
   }
 
   clear() {
-    for (let song of this.songMap.keys()) {
-      this.dropSong(song);
-    }
+    this.root.selectAll('.spiderweb').remove();
   }
 
-  dropSong(song) {
-    /* Remove the spiderwebs for the given song, if present.
-    */
-    let key;
-    if (typeof(song) == 'string') {
-      key = song;
-    } else {
-      key = song.dedupe_key;
-    }
-    let ele = this.songMap.get(key);
-    if (ele == undefined) {
-      console.warn(`Tried to delete song with key ${key} but wasn't present`);
-    }
-    ele.remove();
-    this.songMap.delete(key);
+  decontrast() {
+    this.root.selectAll('.spiderweb.contrast').remove();
   }
 
   // Not used, I think?
   contrast(song) {
     this.plotSong(song, 'contrast');
+  }
+
+  transitionSong(song) {
+    if (song) {
+      this.plotSong(song);
+    }
   }
 
   setSong(song) {

@@ -120,6 +120,7 @@ class SongChart {
   }
 
   contrastSong (song) {
+    // Precondition: song is not already plotted (checked in song-explorer.js)
     if (this.contrast) {
       console.log('Clearing existing contrast song.');
       this.decontrastSong(true);
@@ -133,7 +134,7 @@ class SongChart {
     if ( !this.contrast || (this.sticky && !force) ) {
       return;
     }
-    this.radar.dropSong(this.contrast);
+    this.radar.decontrast();
     this.contrast = undefined;
     this.updateHeading();
   }

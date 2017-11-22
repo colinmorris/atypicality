@@ -1,9 +1,6 @@
 import similarity from 'compute-cosine-similarity';
+import {sonic_attrs} from './common.js';
 
-let sonic_attrs = ['energy', 'liveness', 'speechiness', 'acousticness', 'instrumentalness',
-  'valence', 'danceability',
-  'tempo',
-]
 let sonic_mean_attrs = sonic_attrs.map(s => 'mean_'+s);
 let numeric_song_attrs = [
   'peak', 'wksonchart', 'typicality', 'typicality_all', 'typicality_orig',

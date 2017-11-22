@@ -35,16 +35,16 @@ class StickySongGraphic {
 
   showAverage(show) {
     // NB: this won't persist through song changes
-    this.radar.root.select('.baseline')
+    this.radar.getWebs('baseline')
       .classed('hidden', !show);
   }
 
   highlightWeb(cls) {
-    this.radar.root.select('.spiderweb.' + cls)
+    this.radar.getWebs(cls)
       .classed('highlight', true);
   }
   clearWebHighlights() {
-    this.radar.root.selectAll('.spiderweb.highlight')
+    this.radar.getWebs('highlight')
       .classed('highlight', false);
   }
 
@@ -59,7 +59,9 @@ class StickySongGraphic {
       return;
     }
     this.song = song;
-    this.radar.setSong(this.song);
+    // XXX
+    //this.radar.setSong(this.song);
+    this.radar.transitionSong(song);
     this.updateHeading();
   }
 
