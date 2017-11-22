@@ -129,6 +129,7 @@ class RadarChart {
     .enter()
     .append('circle')
     .classed('marker', true)
+    .attr('r', 5)
     .attr('cx', d => d[0])
     .attr('cy', d => d[1])
     g.append('polygon')
