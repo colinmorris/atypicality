@@ -50,6 +50,10 @@ class Song {
     let v2 = s2.sonic_vector();
     return similarity(v1, v2);
   }
+
+  get_label() {
+    return `${this.artist} - ${this.track}`;
+  }
 }
 
 export {Song};

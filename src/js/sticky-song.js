@@ -4,6 +4,13 @@ import * as songdb from './song-db.js';
 
 /* Radar chart for a song plus other stuff like a title and metadata that 
    doesn't work in the radar chart (typicality, year, mode, key...)
+
+Overall structure:
+- div.heading
+  - slider widget
+  - h3.main
+- div.chart
+  - radar widget
 */
 class StickySongGraphic {
   constructor (root) {
@@ -65,19 +72,17 @@ class StickySongGraphic {
   }
 
   transitionSong(song) {
-    // TODO
+    // TODO: probably should merge with above. Not clear there's a reason for separate semantics.
     this.setSong(song);
   }
 
   setYear(year) {
-    //this.heading.select('.year').text(year);
     this.slider.setYear(year);
   }
 
   updateHeading() {
-    let main = (this.song ? 
-      `${this.song.artist} - ${this.song.track}`
-      : '');
+    // this.song.get_label()
+    let main = this.song ? this.song.get_label() : '';
     this.heading.select('.main').text(main);
     if (this.song) {
       this.setYear(this.song.year);
