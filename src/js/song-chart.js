@@ -133,7 +133,7 @@ class SongChart {
     }
     this.contrast = song;
     this.updateHeading();
-    this.radar.plotSong(song, 'contrast');
+    this.radar.contrast(song);
   }
 
   decontrastSong(force=false) {

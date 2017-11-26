@@ -190,6 +190,7 @@ class RadarChart {
       g = this._plotPoints(this.root, points, cls);
       if (cls=='focal') {
         let mean_points = this._pointsForSong(song, true);
+        // TODO: this nesting of webs is kind of problematical
         let baseline = this._plotPoints(g, mean_points, 'baseline');
       }
     }
@@ -204,12 +205,19 @@ class RadarChart {
 
   decontrast() {
     this._dummify('contrast');
+    this._setClassForWebs('baseline', 'hidden', false);
     //this.root.selectAll('.spiderweb.contrast').remove();
   }
 
-  // Not used, I think?
+  _setClassForWebs(webcls, cls, on=true) {
+    this.root.selectAll(`.spiderweb.${webcls} > *`)
+    .classed(cls, on);
+  }
+
+  // used in song-chart (but not sticky graphic, currently)
   contrast(song) {
     this.plotSong(song, 'contrast');
+    this._setClassForWebs('baseline', 'hidden');
   }
 
   transitionSong(song) {

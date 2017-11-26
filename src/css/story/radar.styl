@@ -43,9 +43,13 @@
     fill-opacity: .2
     &:hover
       fill-opacity: .5
+    &.hidden
+      fill-opacity 0
   circle
     transition fill-opacity $d
     fill-opacity: .5
+    &.hidden
+      fill-opacity 0
 
 /*
 // XXX: quick hack for browsing song radars quickly
