@@ -75,7 +75,7 @@ class StoryTeller {
   addSceneForStep(dat, node) {
     /* Step data attrs to deal with
     *clearsong
-    *contrastsong
+    *contrast
     *pad
     * year_a year_b
     newsong
@@ -89,9 +89,6 @@ class StoryTeller {
       triggerHook: 'onCenter',
       duration: node.offsetHeight,
     });
-    if (dat.year_a) {
-      console.log(`Duration/offsetheight = ${node.offsetHeight}`);
-    }
     /* Notes on trigger hooks:
     - onEnter: starts when the top of ele hits the bottom of the screen
     - onCenter: top of ele hits middle of screen
@@ -151,6 +148,9 @@ class StoryTeller {
       if (dat.clearsong) {
         this.chart.clearSong();
       }
+      if (dat.contrast) {
+        this.chart.setContrast(dat.contrast);
+      }
     }
   }
 
@@ -162,6 +162,9 @@ class StoryTeller {
       if (dat.highlight_sonics) {
         //this.chart.setSonicHighlight('');
         this.chart.radar.unsetSonicHighlights(dat.highlight_sonics);
+      }
+      if (dat.contrast) {
+        this.chart.decontrast();
       }
     }
   }
@@ -175,7 +178,6 @@ class StoryTeller {
     .domain([0, 1])
     .range(d3.range(+dat.year_a, +dat.year_b-1, -1));
     return (event) => {
-      console.log(event.progress.toFixed(2));
       // TODO: some kind of debounce?
       let year = scale(event.progress);
       this.chart.tweenYear(year);

@@ -8,7 +8,9 @@ import * as songdb from './song-db.js';
 Overall structure:
 - div.heading
   - slider widget
-  - h3.main
+  - h3.title
+    - p.focal
+    - p.contrast
 - div.chart
   - radar widget
 */
@@ -26,8 +28,10 @@ class StickySongGraphic {
     //this.heading.append('div').append('mark').classed('year', true)
     this.slider = new YearSlider(this.heading);
 
-    this.heading.append('h3')
-      .classed('main', true);
+    let title = this.heading.append('h3')
+      .classed('title', true);
+    title.append('p').classed('focal', true);
+    title.append('p').classed('contrast', true);
 
     let chart = this.root.append('div').classed('chart', true);
     this.svg = chart.append('svg')
@@ -88,6 +92,30 @@ class StickySongGraphic {
     this.slider.setYear(year);
   }
 
+  setContrast(song) {
+    if (typeof(song) == 'string') {
+      if (this.contrast && song == this.contrast.track) {
+        return;
+      }
+      song = songdb.lookup(song);
+    }
+    if (song == this.contrast) {
+      return;
+    }
+    this.contrast = song;
+    // XXX: could also use radar.contrast, which has side effect of hiding baseline. Not
+    // sure if we want that.
+    //this.radar.plotSong(song, 'contrast');
+    this.radar.contrast(song);
+    this.updateHeading();
+  }
+  decontrast() {
+    this.contrast = undefined;
+    this.radar.decontrast();
+    this.slider.decontrast();
+    this.updateHeading();
+  }
+
   tweenYear(year) {
     // TODO: maybe a very short transition?
     this.slider.snapYear(year);
@@ -102,11 +130,15 @@ class StickySongGraphic {
   }
 
   updateHeading() {
-    // this.song.get_label()
-    let main = this.song ? this.song.get_label() : '';
-    this.heading.select('.main').text(main);
+    let focal_text = this.song ? this.song.get_label() : '';
+    let contrast_text = this.contrast ? this.contrast.get_label() : '';
+    this.heading.select('.title .focal').text(focal_text);
+    this.heading.select('.title .contrast').text(contrast_text);
     if (this.song) {
       this.setYear(this.song.year);
+    }
+    if (this.contrast) {
+      this.slider.setContrastYear(this.contrast.year);
     }
   }
 
@@ -123,10 +155,16 @@ class YearSlider {
       .classed('year-slider', true);
 
     this.svg.append('defs').html(
-      `<filter x="0" y="0" width="1" height="1" id="highlight">
-        <feFlood flood-color="yellow"/>
+      `
+      <filter x="0" y="0" width="1" height="1" id="highlight">
+        <feFlood/>
         <feComposite in="SourceGraphic"/>
-      </filter>`)
+      </filter>
+      <filter x="0" y="0" width="1" height="1" id="highlight-contrast">
+        <feFlood/>
+        <feComposite in="SourceGraphic"/>
+      </filter>
+      `)
 
     let margin = 0;
     this.y = H * 2/3;
@@ -150,13 +188,20 @@ class YearSlider {
     //let axis = d3.axisTop(this.scale);
     //slider.call(axis);
 
-    this.marker = this.svg.append('g')
+    this.marker = this._markerOfClass('focal');
+    this.contrast_marker = this._markerOfClass('contrast');
+  }
+
+  _markerOfClass(cls) {
+    let marker = this.svg.append('g')
       .classed('marker', true)
+      .classed(cls, true)
       .attr('transform', `translate(0, ${this.y})`)
-    this.marker.append('text')
+    marker.append('text')
       .classed('year', true)
-      .attr('filter', 'url(#highlight)')
+      .attr('filter', `url(#highlight${cls == 'contrast' ? '-contrast' : ''}`)
       .attr('y', 0)
+    return marker
   }
 
   setYear(year) {
@@ -188,6 +233,19 @@ class YearSlider {
     this.marker.select('text')
       .attr('x', x)
       .text(year)
+  }
+
+  setContrastYear(year) {
+    let x = this.scale(year);
+    this.contrast_marker
+    .classed('hidden', false)
+    .select('text')
+    .attr('x', x)
+    .text(year)
+  }
+  decontrast() {
+    this.contrast_marker
+    .classed('hidden', true)
   }
 }
 

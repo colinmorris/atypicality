@@ -1,0 +1,23 @@
+#story svg.year-slider
+  width 100%
+  max-height 15vh
+  min-height 0
+  flex-shrink 1
+  $shift = 5
+  .marker.focal text.year
+    alignment-baseline baseline
+    baseline-shift $shift
+  .marker.contrast text.year
+    alignment-baseline hanging
+    baseline-shift (1 - $shift)
+  .marker.hidden
+    opacity 0
+  .marker
+    transition opacity 1s
+
+filter#highlight
+  feFlood
+    flood-color yellow
+filter#highlight-contrast
+  feFlood
+    flood-color red

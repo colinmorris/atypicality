@@ -27,14 +27,7 @@ $debug-scroll = false
       position static
       flex-grow .1
       flex-shrink 1
-      svg.year-slider
-        width 100%
-        max-height 15vh
-        min-height 0
-        flex-shrink 1
-        text.year
-          alignment-baseline middle
-      .main
+      .title
         font-size 1.5rem
         margin-top 0
     .chart
@@ -58,11 +51,11 @@ $debug-scroll = false
     top: auto
     bottom: 0
 
+  $p = 160px
   .step
-    $p = 160px
     padding-top ($p / 4)
     padding-bottom $p
-    $m = 2px
+    $m = 0px
     margin-top $m
     margin-bottom $m
     if $debug-scroll
@@ -75,4 +68,10 @@ $debug-scroll = false
     for n in 1 2 3 4 5
       .pad-bottom-{n}
         padding-bottom $p * n
+
+  // Assumed to be 'wrapper's containing inner step <p>s
+  div.step
+    padding-bottom 0
+    &:last-child
+      padding-bottom $p
 
