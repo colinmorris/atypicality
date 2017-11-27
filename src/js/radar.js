@@ -20,6 +20,20 @@ let mean_dimens = dimens.map(s => 'mean_'+s);
 
 let web_classes = ['focal', 'baseline', 'contrast'];
 
+/* Structural overview:
+svg
+  g.axis *
+  g.spiderweb.contrast
+  g.spiderweb.focal
+  g.spiderweb.baseline
+
+Spiderwebs:
+  - contain circles (.marker) and polygons
+    - circles take classes {highlight,}
+  - take standard semantic classes {contrast, focal, baseline}
+  - take standard presentation classes {hidden, highlight}
+
+*/
 class RadarChart {
 
   constructor(root) {
@@ -68,6 +82,9 @@ class RadarChart {
   }
 
   _dummify(cls) {
+    /* Transition an existing web of the given class to a dummy web (having 0 for
+     * all attributes). 
+    */
     let kwargs = {
       duration: 1000,
       ease: d3.easeCubicIn
@@ -81,12 +98,14 @@ class RadarChart {
   }
 
   _setupDummyWebs() {
+    // Create a dummy web for each standard class
     this._plotPoints(this.root, this._dummyPoints, 'contrast');
-    let g = this._plotPoints(this.root, this._dummyPoints, 'focal');
-    this._plotPoints(g, this._dummyPoints, 'baseline');
+    this._plotPoints(this.root, this._dummyPoints, 'focal');
+    this._plotPoints(this.root, this._dummyPoints, 'baseline');
   }
 
   setSonicHighlights(sonics) {
+    // Highlight the sonic attrs in given space-separated string e.g. 'valence tempo'
     if (sonics) {
       console.debug(`Setting sonic highlights to ${sonics}`);
     }
@@ -138,19 +157,11 @@ class RadarChart {
   }
 
   _transitionPoints(points, g, kwargs={}) {
-    // uggggh
-    let classes = g.attr('class').split(' ');
-    let identifying_cls;
-    for (let cls of classes) {
-      if (web_classes.includes(cls)) {
-        identifying_cls = cls;
-        break;
-      }
-    }
+    // given a spiderweb selection, transition it to represent the given array
+    // of points
     let dur = kwargs.duration || 1000;
     let ease = kwargs.ease || d3.easeCubic;
-    console.assert(identifying_cls);
-    this.root.selectAll(`.spiderweb.${identifying_cls} > circle.marker`)
+    g.selectAll('circle.marker')
       .data(points)
       .transition()
       .duration(dur)
@@ -182,22 +193,22 @@ class RadarChart {
       this._transitionPoints(points, g);
       if (cls=='focal') {
         let mean_points = this._pointsForSong(song, true);
-        let baseline_container = g.select('.baseline');
+        let baseline_container = this.root.select('.baseline');
         this._transitionPoints(mean_points, baseline_container)
       }
     } else {
-      console.log(`No web found of cls ${cls}, so making one from scratch.`);
+      console.warn(`No web found of cls ${cls}, so making one from scratch. (Should never happen?)`);
       g = this._plotPoints(this.root, points, cls);
       if (cls=='focal') {
         let mean_points = this._pointsForSong(song, true);
-        // TODO: this nesting of webs is kind of problematical
-        let baseline = this._plotPoints(g, mean_points, 'baseline');
+        let baseline = this._plotPoints(this.root, mean_points, 'baseline');
       }
     }
 
     return g;
   }
 
+  // deprecated. Should use dummify.
   clear() {
     console.warn('u sure u wanna clear?');
     this.root.selectAll('.spiderweb').remove();
