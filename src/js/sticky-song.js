@@ -240,8 +240,10 @@ class YearSlider {
     this.contrast_marker
     .classed('hidden', false)
     .select('text')
-    .attr('x', x)
     .text(year)
+    .transition()
+    .duration(600)
+    .attr('x', x)
   }
   decontrast() {
     this.contrast_marker
