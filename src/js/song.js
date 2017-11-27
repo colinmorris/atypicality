@@ -23,6 +23,14 @@ class Song {
     return s;
   }
 
+  static dummySong() {
+    let s = new Song();
+    for (let attr of numeric_song_attrs) {
+      s[attr] = 0;
+    }
+    return s
+  }
+
   get decade() {
     return this.year - (this.year % 10);
   }

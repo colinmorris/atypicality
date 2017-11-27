@@ -18,4 +18,18 @@ function lookup(track) {
   return matches[0];
 }
 
-export {load, db, lookup};
+function _kwargs_matcher(kwargs) {
+  return (song) => {
+    return Object.entries(kwargs).every( (kv) => {
+      let key = kv[0];
+      let val = kv[1];
+      return song[key] == val;
+    });
+  }
+}
+
+function query_one(kwargs) {
+  return db.find(_kwargs_matcher(kwargs));
+}
+
+export {load, db, lookup, query_one};

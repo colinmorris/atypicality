@@ -1,4 +1,5 @@
 import * as common from './common.js';
+import {Song} from './song.js';
 
 let dimens = common.sonic_attrs;
 
@@ -160,6 +161,9 @@ class RadarChart {
     // given a spiderweb selection, transition it to represent the given array
     // of points
     let dur = kwargs.duration || 1000;
+    if (kwargs.speedup) {
+      dur /= kwargs.speedup;
+    }
     let ease = kwargs.ease || d3.easeCubic;
     g.selectAll('circle.marker')
       .data(points)
@@ -182,7 +186,7 @@ class RadarChart {
     return this.root.selectAll('.spiderweb.'+cls);
   }
 
-  plotSong(song, cls='focal') {
+  plotSong(song, cls='focal', kwargs={}) {
     /* Plot the given song in a spiderweb having the given class.
     If one already exists, reuse the elements and transition the points
     to their new positions.
@@ -190,13 +194,12 @@ class RadarChart {
     let points = this._pointsForSong(song);
     let g = this.root.select('.spiderweb.'+cls)
     if (!g.empty()) {
-      this._transitionPoints(points, g);
+      this._transitionPoints(points, g, kwargs);
       if (cls=='focal') {
-        let mean_points = this._pointsForSong(song, true);
-        let baseline_container = this.root.select('.baseline');
-        this._transitionPoints(mean_points, baseline_container)
+        this.plotBaseline(song, kwargs);
       }
     } else {
+      // TODO: not needed?
       console.warn(`No web found of cls ${cls}, so making one from scratch. (Should never happen?)`);
       g = this._plotPoints(this.root, points, cls);
       if (cls=='focal') {
@@ -206,6 +209,12 @@ class RadarChart {
     }
 
     return g;
+  }
+
+  plotBaseline(song, kwargs) {
+    let mean_points = this._pointsForSong(song, true);
+    let baseline_container = this.root.select('.baseline');
+    this._transitionPoints(mean_points, baseline_container, kwargs);
   }
 
   // deprecated. Should use dummify.
@@ -234,6 +243,8 @@ class RadarChart {
   transitionSong(song) {
     if (song) {
       this.plotSong(song);
+    } else {
+      this.plotSong(Song.dummySong());
     }
   }
 
@@ -243,6 +254,8 @@ class RadarChart {
     //this.clear();
     if (song) {
       this.plotSong(song);
+    } else {
+      this.plotSong(Song.dummySong());
     }
   }
 }

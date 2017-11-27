@@ -77,6 +77,7 @@ class StoryTeller {
     *clearsong
     *contrastsong
     *pad
+    * year_a year_b
     newsong
     highlight_sonics
     hide_avg
@@ -88,7 +89,18 @@ class StoryTeller {
       triggerHook: 'onCenter',
       duration: node.offsetHeight,
     });
-    /* Assuming duration=0...
+    if (dat.year_a) {
+      console.log(`Duration/offsetheight = ${node.offsetHeight}`);
+    }
+    /* Notes on trigger hooks:
+    - onEnter: starts when the top of ele hits the bottom of the screen
+    - onCenter: top of ele hits middle of screen
+      - so if duration = node height, scene begins when top of ele hits middle
+        of screen, and ends when bottom of ele hits middle of screen
+    - onLeave: when top of ele hits top of screen
+    */
+    /* Notes on events...
+    Assuming duration=0...
       start is fired every time the trigger threshold is crossed (either direction)
       enter is fired scrolling forward through it
       leave is fired scrolling up through it
@@ -99,6 +111,10 @@ class StoryTeller {
       start: scrolling past start position (either direction)
       end: scrolling past end position (either direction)
     */
+    let progress_cb = this.progressCbForStepdat(dat);
+    if (progress_cb) {
+      scene.on('progress', progress_cb);
+    }
     scene.on('enter', (event) => {
       //console.debug('Entered scene with data ', dat);
       sel.classed('active', true);
@@ -132,6 +148,9 @@ class StoryTeller {
       if (dat.highlight_web) {
         this.chart.highlightWeb(dat.highlight_web);
       }
+      if (dat.clearsong) {
+        this.chart.clearSong();
+      }
     }
   }
 
@@ -144,6 +163,22 @@ class StoryTeller {
         //this.chart.setSonicHighlight('');
         this.chart.radar.unsetSonicHighlights(dat.highlight_sonics);
       }
+    }
+  }
+
+  progressCbForStepdat(dat) {
+    if (!dat.year_a) {
+      return;
+    }
+    // TODO: Maybe should be a non-linear scale? Slower at beginning and end.
+    let scale = d3.scaleQuantize()
+    .domain([0, 1])
+    .range(d3.range(+dat.year_a, +dat.year_b-1, -1));
+    return (event) => {
+      console.log(event.progress.toFixed(2));
+      // TODO: some kind of debounce?
+      let year = scale(event.progress);
+      this.chart.tweenYear(year);
     }
   }
 

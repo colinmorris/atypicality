@@ -39,6 +39,14 @@ class StickySongGraphic {
     this.radar.setSonicHighlights(sonics);
   }
 
+  clearSong() {
+    // could also set class to hidden to fade rather than shrink.
+    console.log('clearing');
+    //this.radar._dummify('focal');
+    //this.radar._dummify('baseline');
+    this.setSong();
+  }
+
   showAverage(show) {
     // NB: this won't persist through song changes
     this.radar.getWebs('baseline')
@@ -78,6 +86,19 @@ class StickySongGraphic {
 
   setYear(year) {
     this.slider.setYear(year);
+  }
+
+  tweenYear(year) {
+    // TODO: maybe a very short transition?
+    this.slider.snapYear(year);
+    // TODO: debounce (here or one level up). Or just make this less inefficient. 
+    let eg = songdb.query_one({year: year});
+    let kwargs = {
+      // maybe different easing fn too?
+      speedup: 3,
+      ease: d3.cubicOut
+    };
+    this.radar.plotBaseline(eg, kwargs);
   }
 
   updateHeading() {
@@ -156,6 +177,17 @@ class YearSlider {
       .attr('x', x)
       //.on('end', function() { d3.select(this).text(year); })
     }
+  }
+
+  snapYear(year) {
+    // Like above, but instant.
+    // cancel any existing transitions
+    this.marker.select('text').interrupt('yearswing');
+    this.year_set = true;
+    let x = this.scale(year);
+    this.marker.select('text')
+      .attr('x', x)
+      .text(year)
   }
 }
 
