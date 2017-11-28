@@ -23,26 +23,28 @@
 
 .spiderweb
   // primary song
-  fill cyan
+  &.focal
+    fill $focal_color
   // another song temporarily contrasted with primary song
   &.contrast
-    fill red
+    fill $contrast_color
   // 'avg song' baseline blob
   &.baseline
-    fill #999
+    fill #bbb
     &.hidden
       //fill #9990
       polygon, circle
         fill-opacity 0
+  $alpha = .4
   // temporarily drawing attention to a particular web
   &.highlight polygon
-    fill-opacity .5
+    fill-opacity ($alpha * 1.5)
   $d = 1s
   polygon
     transition fill-opacity $d*2
-    fill-opacity: .2
+    fill-opacity: $alpha
     &:hover
-      fill-opacity: .5
+      fill-opacity: ($alpha * 1.5)
     &.hidden
       fill-opacity 0
   circle

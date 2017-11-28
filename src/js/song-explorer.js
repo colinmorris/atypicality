@@ -51,7 +51,7 @@ class SongExplorer {
     let simsongs_future = this.moreSongs.append('div')
       .classed('simsongs-future', true)
       .classed('picker', true)
-    simsongs_future.append('span').classed('label', true).text('Similar songs (future): ');
+    simsongs_future.append('span').classed('label', true).text('Dissimilar songs: ');
     simsongs_future.append('span').classed('songs', true);
     this.selectSong(default_song);
   }
@@ -130,12 +130,24 @@ class SongExplorer {
     sel.merge(newsongs)
     .text(song=>song.track)
     .attr('title', song => 100 * song.typicality.toPrecision(2) + '% typical')
-    .style('color', song => common.typicality_cmap(song.typicality))
+    // Originally tried coloring on typicality, then on similarity to focal song,
+    // but it all ended up kind of ugly and not very useful.
+    //.style('color', song => this._songColor(song)) // TODO: update on song select
     .on('click', song => this.selectSong(song))
     .on('mouseover', song => this.contrastSong(song))
     .on('mouseout', song => this.decontrastSong())
     .on('contextmenu', song => this.songChart.setSticky()) // XXX: temporary hack
     .classed('active', song => song==this.song)
+  }
+
+  // XXX: not used
+  _songColor(song) {
+    if (!this.song) {
+      return 'black';
+    } else {
+      let sim = this.song.similarity(song);
+      return common.similarity_cmap(sim);
+    }
   }
 
   populateSongs(root, songs) {
@@ -148,7 +160,7 @@ class SongExplorer {
 
     sel.merge(newsongs)
     .text(song=>song.track)
-    .style('color', song => common.typicality_cmap(song.typicality))
+    //.style('color', song => this._songColor(song))
     .on('click', song => this.selectSong(song))
     .on('mouseover', song => this.contrastSong(song))
     .on('mouseout', song => this.decontrastSong())
@@ -177,23 +189,21 @@ class SongExplorer {
       this.populateSongs(this.moreby.select('.songs'), same_artist);
     }
 
+    let lookahead = 100;
+    let lookbehind = 100;
+    // XXX: Removing year restriction might make this really slow?
     let cands = this.songdat.filter(song => (
-      ( (this.song.year-song.year) >= 0 )
-      && ( (this.song.year - song.year) < 8 )
+      ( (song.year - this.song.year) < lookahead )
+      && ( (this.song.year - song.year) < lookbehind )
       && ( song.track != this.song.track )
     ));
+    let n = 10;
     cands.sort( (s1, s2) => d3.descending(this.song.similarity(s1), this.song.similarity(s2)) );
-    cands = cands.slice(0, 10);
-    this.populateSongs(this.moreSongs.select('.simsongs .songs'), cands);
-    // future sims
-    cands = this.songdat.filter(song => (
-      ( (this.song.year-song.year) < 0 )
-      && ( (this.song.year - song.year) > -8 )
-      && ( song.track != this.song.track )
-    ));
-    cands.sort( (s1, s2) => d3.descending(this.song.similarity(s1), this.song.similarity(s2)) );
-    cands = cands.slice(0, 10);
-    this.populateSongs(this.moreSongs.select('.simsongs-future .songs'), cands);
+    let sims = cands.slice(0, n);
+    this.populateSongs(this.moreSongs.select('.simsongs .songs'), sims);
+    // dissimilar
+    sims = cands.slice(-n).reverse();
+    this.populateSongs(this.moreSongs.select('.simsongs-future .songs'), sims);
   }
 
   contrastSong(song) {

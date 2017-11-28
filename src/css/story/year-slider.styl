@@ -15,9 +15,10 @@
   .marker
     transition opacity 1s
 
+// TODO: try to put a bit of side padding on highlights?
 filter#highlight
   feFlood
     flood-color yellow
 filter#highlight-contrast
   feFlood
-    flood-color red
+    flood-color lighten($contrast_color, 65%)

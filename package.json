@@ -16,6 +16,7 @@
     "babel-register": "^6.26.0",
     "browser-sync": "^2.18.13",
     "compute-cosine-similarity": "^1.0.0",
+    "d3-scale-chromatic": "^1.1.1",
     "del": "^3.0.0",
     "eslint": "^4.6.1",
     "eslint-config-airbnb-base": "^12.0.0",

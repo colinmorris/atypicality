@@ -8,18 +8,14 @@ Radar chart + a bit of song metadata and bookkeeping.
 Kind of a leaky/weak abstraction.
 */
 class SongChart {
-  constructor (root, show_year=false, standalone=false) {
+  constructor (root) {
     this.root = root;
     this.name = root.attr('class');
-    this.show_year = show_year;
     this.heading = this.root.append('div')
       .classed('heading', true)
       .classed('tk-atlas', true)
       .classed('prose__hed', true)
     let main_title = this.heading.append('h3');
-    if (standalone) {
-      main_title = main_title.append('mark');
-    }
     main_title.classed('main', true);
     this.heading.append('h4').classed('contrast', true)
       .style('color', common.contrast_color);
@@ -108,16 +104,13 @@ class SongChart {
   }
 
   updateHeading() {
-    let main = `${this.song.artist} - ${this.song.track} (${(100*this.song.typicality).toPrecision(3)}% typical)`;
-    if (this.show_year) {
-      main = `${this.song.year}: ${main}`;
-    }
+    let main = this.song.get_label();
     this.heading.select('.main').text(main);
     let con = this.heading.select('.contrast');
     if (this.contrast) {
       con.style('opacity', 1);
       let sim = 100 * this.song.similarity(this.contrast);
-      let con_text = ` vs. ${this.contrast.artist} - ${this.contrast.track} (${sim.toPrecision(3)}% similar)`;
+      let con_text = ` vs. ${this.contrast.get_label()} (${sim.toPrecision(3)}% similar)`;
       con.text(con_text);
     } else {
       con.text('|');
