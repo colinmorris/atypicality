@@ -158,13 +158,13 @@ class StickySongGraphic {
 
 class YearSlider {
   constructor(parent) {
-    let W = 500;
+    let W = 800;
     let H = 50;
+    let preserve = false;
     this.svg = parent.append('svg')
-      .attr('viewbox', `0 0 ${W} ${H}`)
-      .attr('preserveAspectRatio', 'xMidYMid meet')
-      //.attr('preserveAspectRatio', 'none')
-      .classed('year-slider', true);
+      .attr('viewBox', `0 0 ${W} ${H}`)
+      .classed('year-slider', true)
+      .attr('preserveAspectRatio', preserve ? 'xMidYMid meet' : 'none');
 
     this.svg.append('defs').html(
       `
@@ -179,16 +179,13 @@ class YearSlider {
       `)
 
     let margin = 0;
-    this.y = H * 2/3;
-    let slider = this.svg.append('g')
-    .classed('slider', true)
-    //.attr('transform', `translate(${margin}, ${this.y})`)
+    this.y = H * 1/2;
     
     this.scale = d3.scaleLinear()
       .domain(common.year_range)
       .range([margin, W-margin])
 
-    let track = slider.append('line')
+    let track = this.svg.append('line')
       .classed('track', true)
       .attr('x1', this.scale.range()[0])
       .attr('x2', this.scale.range()[1])
@@ -196,9 +193,6 @@ class YearSlider {
       .attr('y2', this.y)
       .attr('stroke', '#000')
       .attr('stroke-width', 1)
-
-    //let axis = d3.axisTop(this.scale);
-    //slider.call(axis);
 
     this.marker = this._markerOfClass('focal');
     this.contrast_marker = this._markerOfClass('contrast');
