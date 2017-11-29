@@ -7,7 +7,11 @@ $debug-scroll = false
 /**
  Overall layout of story thing:
    div#story
-    div.sticky (sticky graphic element, see sticky-song.js and sticky.styl)
+    div.sticky-wrapper (sticky graphic element, see sticky-song.js and sticky.styl)
+      // the wrapper thing was so that it could be flex laid out while the child
+      // .sticky div was absolute/fixed, though switched to scrollmagic.setPin, so
+      // no longer necessary
+      div.sticky
     div.prose.scrolltext
       a bunch of <p>, <div>, .step, etc. elements
 
@@ -16,20 +20,19 @@ $debug-scroll = false
  The contents of .sticky are styled in sticky.styl.
  **/
 #story
+  width: 100%
   // laid out normally then repositioned *relative to itself*
   position: relative
-  width: 100%
-  .scrolltext
-    position: relative
-    width: 33%
-    max-width: 30rem
-    margin-right: 2.5%
-  .is-fixed
-    // positioned relative to viewport
-    position: fixed
-  .is-bottom
-    top: auto
-    bottom: 0
+  display flex
+  flex-direction row
+  justify-content space-around
+
+#story .scrolltext
+  //position: relative
+  flex 1 1 15rem
+  order 2
+  min-width 10rem
+  max-width: 40rem
 
   $p = 160px
   .step
@@ -49,7 +52,7 @@ $debug-scroll = false
       .pad-bottom-{n}
         padding-bottom $p * n
 
-  // Assumed to be 'wrapper's containing inner step <p>s
+  // Assumed to be 'wrappers' containing inner step <p>s
   div.step
     padding-bottom 0
     &:last-child

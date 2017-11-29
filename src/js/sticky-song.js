@@ -178,7 +178,13 @@ class YearSlider {
       </filter>
       `)
 
-    let margin = 0;
+    // We're centering the marker text on the given x position, so putting a marker
+    // at x=0 or x=W will lead to some text spilling off the edge. Back-of-the-envelope
+    // compensation. (Could probably directly compute width of marker element after
+    // creating it, but it's never that serious, Jaremi)
+    let glyph_width = H/3 * .5;
+    let marker_width = (glyph_width * 4) + (glyph_width * 2 * .15);
+    let margin = marker_width/2;
     this.y = H * 1/2;
     
     this.scale = d3.scaleLinear()

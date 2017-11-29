@@ -28,6 +28,7 @@ class StoryTeller {
       triggerHook: 'onLeave',
       duration: Math.max(1, this.root.node().offsetHeight - viewportHeight)
     })
+    .setPin('#story .sticky')
     .on('enter', () => {
       console.debug('Pinning story div');
       this.toggleFixed(true, false);
@@ -41,6 +42,8 @@ class StoryTeller {
   }
 
   toggleFixed(fixed, bottom) {
+    // XXX
+    return;
     this.sticky.classed('is-fixed', fixed);
     this.sticky.classed('is-bottom', bottom);
   }
