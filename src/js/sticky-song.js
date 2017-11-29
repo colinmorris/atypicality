@@ -26,8 +26,7 @@ class StickySongGraphic {
       .classed('tk-atlas', true)
       .classed('prose__hed', true)
 
-    //this.heading.append('div').append('mark').classed('year', true)
-    this.slider = new YearSlider(this.heading);
+    this.slider = new YearSlider(this.root);
 
     this.title = new SongChartTitle(this.heading)
 
@@ -160,7 +159,7 @@ class YearSlider {
   constructor(parent) {
     let W = 800;
     let H = 50;
-    let preserve = false;
+    let preserve = true;
     this.svg = parent.append('svg')
       .attr('viewBox', `0 0 ${W} ${H}`)
       .classed('year-slider', true)
