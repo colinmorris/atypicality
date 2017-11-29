@@ -1,6 +1,7 @@
 import {RadarChart} from './radar.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
+import {SongChartTitle} from './title.js';
 
 /*
 Used in SongExplorer.
@@ -15,10 +16,7 @@ class SongChart {
       .classed('heading', true)
       .classed('tk-atlas', true)
       .classed('prose__hed', true)
-    let main_title = this.heading.append('h3');
-    main_title.classed('main', true);
-    this.heading.append('h4').classed('contrast', true)
-      .style('color', common.contrast_color);
+    this.title = new SongChartTitle(this.heading);
     let radar_sidelen = Math.min(
       this.root.node().offsetWidth,
       window.innerHeight * .8
@@ -68,9 +66,9 @@ class SongChart {
 
     this.song = song;
     this.radar.setSong(this.song);
+    this.title.setSong(song);
     // TODO: lazy quick fix
     if (this.song) {
-      this.updateHeading();
       this.updateTray();
     }
   }
@@ -103,6 +101,7 @@ class SongChart {
     }
   }
 
+  // XXX: no longer used
   updateHeading() {
     let main = this.song.get_label();
     this.heading.select('.main').text(main);
@@ -125,7 +124,7 @@ class SongChart {
       //this.decontrastSong(true);
     }
     this.contrast = song;
-    this.updateHeading();
+    this.title.setContrast(song);
     this.radar.contrast(song);
   }
 
@@ -135,7 +134,7 @@ class SongChart {
     }
     this.radar.decontrast();
     this.contrast = undefined;
-    this.updateHeading();
+    this.title.setContrast();
   }
 
   setSticky() {

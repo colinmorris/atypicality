@@ -35,16 +35,17 @@
       //fill #9990
       polygon, circle
         fill-opacity 0
-  $alpha = .4
   // temporarily drawing attention to a particular web
   &.highlight polygon
-    fill-opacity ($alpha * 1.5)
+    fill-opacity ($web_opacity * 1.5)
+  &.fade polygon
+    fill-opacity ($web_opacity * .5)
   $d = 1s
   polygon
     transition fill-opacity $d*2
-    fill-opacity: $alpha
+    fill-opacity: $web_opacity
     &:hover
-      fill-opacity: ($alpha * 1.5)
+      fill-opacity: ($web_opacity * 1.5)
     &.hidden
       fill-opacity 0
   circle

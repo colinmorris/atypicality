@@ -18,7 +18,9 @@
 // TODO: try to put a bit of side padding on highlights?
 filter#highlight
   feFlood
-    flood-color yellow
+    //flood-color yellow
+    flood-color $focal_web_color
 filter#highlight-contrast
   feFlood
-    flood-color lighten($contrast_color, 65%)
+    //flood-color lighten($contrast_color, 65%)
+    flood-color $contrast_web_color

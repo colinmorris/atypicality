@@ -1,0 +1,36 @@
+#story .sticky
+  width 60%
+  // absolute: positioned relative to closest ancestor and 'removed from normal document flow' - no space is allocated for it
+  //position absolute
+  // I'm not sure if this flex stuff is actually providing any benefit, but kind of 
+  // afraid to take it out at this point.
+  display flex
+  flex-direction column
+  justify-content start
+  top 0
+  left 0
+  bottom auto
+  //margin-right 40%
+  margin-left 2%
+  // why?
+  transform translate3d(0, 0, 0)
+  // TODO: apparently a bad idea on mobile?
+  height 100vh
+  .heading
+    position static
+    flex-grow .1
+    flex-shrink 1
+    .songchart-title
+      margin-top 0
+    .hidden
+      // do this instead of display:none so the space for it remains reserved, and
+      // the radar chart doesn't jump around
+      opacity 0
+  .chart
+    position static
+    flex-grow .3
+    flex-shrink 1
+    min-height 0
+    svg
+      max-height 80vh
+      min-height 0

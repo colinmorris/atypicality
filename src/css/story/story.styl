@@ -4,41 +4,12 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
 
 $debug-scroll = false
 
+// See sticky.styl for styling of 'sticky' chart
+// This module mostly has to do with the text column.
 #story
   // laid out normally then repositioned *relative to itself*
   position: relative
   width: 100%
-  .sticky
-    width 60%
-    // positioned relative to closest ancestor and 'removed from normal document flow' - no space is allocated for it
-    position absolute
-    display flex
-    flex-direction column
-    justify-content start
-    top 0
-    left 0
-    bottom auto
-    margin-right 40%
-    margin-left 2%
-    transform translate3d(0, 0, 0)
-    // TODO: apparently a bad idea on mobile?
-    height 100vh
-    .heading
-      position static
-      flex-grow .1
-      flex-shrink 1
-      .title
-        font-size 1.5rem
-        margin-top 0
-    .chart
-      position static
-      flex-grow .3
-      flex-shrink 1
-      min-height 0
-      svg
-        max-height 80vh
-        min-height 0
-
   .scrolltext
     position: relative
     width: 33%

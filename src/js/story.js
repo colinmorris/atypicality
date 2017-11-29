@@ -145,6 +145,9 @@ class StoryTeller {
       if (dat.highlight_web) {
         this.chart.highlightWeb(dat.highlight_web);
       }
+      if (dat.fade_web) {
+        this.chart.fadeWeb(dat.fade_web);
+      }
       if (dat.clearsong) {
         this.chart.clearSong();
       }
@@ -156,7 +159,7 @@ class StoryTeller {
 
   leaveCbForStepdat(dat) {
     return (event) => {
-      if (dat.highlight_web) {
+      if (dat.highlight_web || dat.fade_web) {
         this.chart.clearWebHighlights();
       }
       if (dat.highlight_sonics) {

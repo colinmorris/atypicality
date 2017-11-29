@@ -1,2 +1,11 @@
 $focal_color = #0077ff
 $contrast_color = #ff0400
+
+$web_opacity = .4
+
+$focal_web_color = alpha($focal_color, $web_opacity)
+$contrast_web_color = alpha($contrast_color, $web_opacity)
+
+$_darken = 0%
+$focal_text_color = darken($focal_color, $_darken)
+$contrast_text_color = darken($contrast_color, $_darken)

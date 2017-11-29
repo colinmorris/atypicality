@@ -1,6 +1,7 @@
 import {RadarChart} from './radar.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
+import {SongChartTitle} from './title.js';
 
 /* Radar chart for a song plus other stuff like a title and metadata that 
    doesn't work in the radar chart (typicality, year, mode, key...)
@@ -28,10 +29,7 @@ class StickySongGraphic {
     //this.heading.append('div').append('mark').classed('year', true)
     this.slider = new YearSlider(this.heading);
 
-    let title = this.heading.append('h3')
-      .classed('title', true);
-    title.append('p').classed('focal', true);
-    title.append('p').classed('contrast', true);
+    this.title = new SongChartTitle(this.heading)
 
     let chart = this.root.append('div').classed('chart', true);
     this.svg = chart.append('svg')
@@ -61,9 +59,15 @@ class StickySongGraphic {
     this.radar.getWebs(cls)
       .classed('highlight', true);
   }
+  fadeWeb(cls) {
+    this.radar.getWebs(cls)
+      .classed('fade', true);
+  }
   clearWebHighlights() {
-    this.radar.getWebs('highlight')
-      .classed('highlight', false);
+    for (let cls of ['highlight', 'fade']) {
+      this.radar.getWebs(cls)
+        .classed(cls, false);
+    }
   }
 
   setSong(song) {
@@ -80,7 +84,10 @@ class StickySongGraphic {
     // XXX
     //this.radar.setSong(this.song);
     this.radar.transitionSong(song);
-    this.updateHeading();
+    this.title.setSong(song);
+    if (song) {
+      this.slider.setYear(song.year);
+    }
   }
 
   transitionSong(song) {
@@ -88,6 +95,7 @@ class StickySongGraphic {
     this.setSong(song);
   }
 
+  // XXX: not used/redundant?
   setYear(year) {
     this.slider.setYear(year);
   }
@@ -107,13 +115,14 @@ class StickySongGraphic {
     // sure if we want that.
     //this.radar.plotSong(song, 'contrast');
     this.radar.contrast(song);
-    this.updateHeading();
+    this.slider.setContrastYear(this.contrast.year);
+    this.title.setContrast(song);
   }
   decontrast() {
     this.contrast = undefined;
     this.radar.decontrast();
     this.slider.decontrast();
-    this.updateHeading();
+    this.title.setContrast();
   }
 
   tweenYear(year) {
@@ -130,10 +139,13 @@ class StickySongGraphic {
   }
 
   updateHeading() {
+    console.warn('updateHeading deprecated')
     let focal_text = this.song ? this.song.get_label() : '';
     let contrast_text = this.contrast ? this.contrast.get_label() : '';
     this.heading.select('.title .focal').text(focal_text);
-    this.heading.select('.title .contrast').text(contrast_text);
+    this.heading.select('.title .contrast-song').text(contrast_text);
+    this.heading.select('.title').classed('hidden', !this.song);
+    this.heading.select('.title .contrast').classed('hidden', !this.contrast);
     if (this.song) {
       this.setYear(this.song.year);
     }
