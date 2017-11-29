@@ -4,8 +4,17 @@ cf. song-repetition/src/css/story/scrolly-columns.styl
 
 $debug-scroll = false
 
-// See sticky.styl for styling of 'sticky' chart
-// This module mostly has to do with the text column.
+/**
+ Overall layout of story thing:
+   div#story
+    div.sticky (sticky graphic element, see sticky-song.js and sticky.styl)
+    div.prose.scrolltext
+      a bunch of <p>, <div>, .step, etc. elements
+
+ This module deals with #story, the arrangement of sticky and prose wrt the parent,
+ and styling the contents of .scrolltext.
+ The contents of .sticky are styled in sticky.styl.
+ **/
 #story
   // laid out normally then repositioned *relative to itself*
   position: relative
