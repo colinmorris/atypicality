@@ -157,6 +157,8 @@ class StickySongGraphic {
 
 class YearSlider {
   constructor(parent) {
+    // NB: if you change these, make sure to update .styl files that rely on this
+    // aspect ratio
     let W = 800;
     let H = 50;
     let preserve = true;

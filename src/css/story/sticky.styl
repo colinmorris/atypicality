@@ -1,4 +1,7 @@
-$debug-flex = true
+/* Turn this on to put little dotted borders around each flex item,
+    to get a better sense of their sizes, and how space is distributed between/around them.
+*/
+$debug-flex = false
 #story .sticky-wrapper
   flex 1.5 1 50rem
   order 1
@@ -24,6 +27,8 @@ $debug-flex = true
     flex-direction column
     // How space is distributed between/around content items along main (y) axis
     justify-content space-around
+    // alignment of items on the cross-axis (horizontal)
+    align-items stretch
     top 0
     bottom auto
     //margin-right 40%
@@ -32,10 +37,12 @@ $debug-flex = true
     transform translate3d(0, 0, 0)
     // TODO: apparently a bad idea on mobile?
     height 100vh
-    .year-slider // cf. year-slider.styl
+    // cf. year-slider.styl
+    .year-slider
       order 1
-      flex 0 1 50px
+      flex 0 0 content
       width 100%
+      min-height 0
     .heading
       order 2
       flex 0 1
@@ -47,7 +54,9 @@ $debug-flex = true
         opacity 0
     .chart
       order 3
-      flex .8 1
+      // XXX: When the sum of flex-grows for all child flex items is < 1, it means that
+      // only that proportion of leftover space gets used for growing. Neat.
+      flex .95 1
       min-height 0
       svg
         max-height 80vh
