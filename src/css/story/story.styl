@@ -42,21 +42,27 @@ $debug-scroll = false
 
   $p = 160px
   .step
+    background lighten(#f3f3f3, 30%)
+    background-clip content-box
+    opacity .5
+    &.active
+      opacity 1
+    &.post-active
+      opacity .8
+    transition opacity .5s
     padding-top ($p / 4)
     padding-bottom $p
     $m = 0px
     margin-top $m
     margin-bottom $m
     if $debug-scroll
-      background-color: rgba(255, 66, 2, .04)
-      &.active
-        background-color: rgba(66, 255, 2, .1)
-    else
       &.active
         background-color rgba(66, 255, 2, .05)
     for n in 1 2 3 4 5
       .pad-bottom-{n}
         padding-bottom $p * n
+      &.unpad-bottom-{n}
+        padding-bottom ($p / n)
 
   // Assumed to be 'wrappers' containing inner step <p>s
   div.step

@@ -41,8 +41,8 @@ class StoryTeller {
     this.setupScenes();
   }
 
+  // XXX: deprecated
   toggleFixed(fixed, bottom) {
-    // XXX
     return;
     this.sticky.classed('is-fixed', fixed);
     this.sticky.classed('is-bottom', bottom);
@@ -68,7 +68,7 @@ class StoryTeller {
   }
 
   setupScenes() {
-    this.root.selectAll('.step')
+    this.root.selectAll('.step, p')
     .datum(function() { return this.dataset; })
     .each( (dat, ix, nodes) => {
       this.addSceneForStep(dat, nodes[ix]);
@@ -86,11 +86,14 @@ class StoryTeller {
     hide_avg
     show_avg
     */
+    // Negative value to trigger before hitting the center, positive for after.
+    let offset = 0;
     let sel = d3.select(node);
     let scene = new ScrollMagic.Scene({
       triggerElement: node,
       triggerHook: 'onCenter',
       duration: node.offsetHeight,
+      offset: offset
     });
     /* Notes on trigger hooks:
     - onEnter: starts when the top of ele hits the bottom of the screen
@@ -117,14 +120,16 @@ class StoryTeller {
     }
     scene.on('enter', (event) => {
       //console.debug('Entered scene with data ', dat);
-      sel.classed('active', true);
+      sel.classed('active', true)
+      .classed('post-active', false);
       this.enterCbForStepdat(dat)(event);
     })
     //.on('start', this.enterCbForStepdat(dat))
     // XXX: If steps end up not tiling vertical plane may need to also add leave callbacks
     // for certain step data attrs
     .on('leave', (event) => {
-      sel.classed('active', false);
+      sel.classed('active', false)
+      .classed('post-active', true);
     })
     .on('leave', this.leaveCbForStepdat(dat))
     .addTo(this.controller);
