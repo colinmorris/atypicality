@@ -73,6 +73,8 @@ class RadarChart {
     // TODO: should just have dimension objs with name, description, scale, etc. etc.
     .datum((s,i) => dimens[i])
     .text(dim => dim)
+    .classed('left', dim => dim == 'instrumentalness')
+    .classed('right', dim => dim == 'energy')
     // hover text
     this.axis_labels
     .append('title')
