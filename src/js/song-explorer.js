@@ -129,7 +129,7 @@ class SongExplorer {
 
     sel.merge(newsongs)
     .text(song=>song.track)
-    .attr('title', song => 100 * song.typicality.toPrecision(2) + '% typical')
+    //.attr('title', song => 100 * song.typicality.toPrecision(2) + '% typical')
     // Originally tried coloring on typicality, then on similarity to focal song,
     // but it all ended up kind of ugly and not very useful.
     //.style('color', song => this._songColor(song)) // TODO: update on song select

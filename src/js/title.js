@@ -15,7 +15,7 @@ class SongChartTitle {
     this.focal.classed('hidden', !song);
   }
   setContrast(song) {
-    this.contrast.text( (song && song.get_label()) || '');
+    this.contrast.text( (song && song.get_label()) || 'avg. song');
     this.contrast_container.classed('hidden', !song);
   }
 }
