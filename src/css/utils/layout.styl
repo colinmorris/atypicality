@@ -3,62 +3,100 @@
 // -------------------
 
 body
-	font-feature-settings 'kern' 1, 'onum' 1, 'liga' 0, 'tnum' 1
+	font-family $sans
+	font-feature-settings 'kern' 1,
+ 'onum' 1,
+ 'liga' 0,
+ 'tnum' 1
 	-webkit-font-smoothing antialiased
 	-moz-osx-font-smoothing grayscale
-	-webkit-tap-highlight-color rgba(0,0,0,0)
+	-webkit-tap-highlight-color rgba(0,
+0,
+0,
+0)
 	background-color $bg
 	color $fg
-	set-type-size(root, false)
+	set-type-size(root,
+ false)
 	+mq('bp-2')
-		set-type-size(medium, false)
+		set-type-size(medium,
+ false)
 
 h1
-	set-type-size(xx-large, true)
+	set-type-size(xx-large,
+ true)
 	margin-top 1.5rem
 h2
-	set-type-size(x-large, true)
+	set-type-size(x-large,
+ true)
 	margin-top 1.5rem
 h3
-	set-type-size(large, true)
+	set-type-size(large,
+ true)
 	margin-top 1.5rem
 h4
-	set-type-size(medium, true)
+	set-type-size(medium,
+ true)
 	margin-top 1.5rem
 h5
-	set-type-size(root, true)
+	set-type-size(root,
+ true)
 	margin-top 1.5rem
 h6
-	set-type-size(small, true)
+	set-type-size(small,
+ true)
 	margin-top 1.5rem
 p 
 	margin 1.5rem 0
-	set-type-size(root, true)
+	set-type-size(root,
+ true)
 	+mq('bp-2')
-		set-type-size(medium, true)
+		set-type-size(medium,
+ true)
 
 a
-	text-decoration none
-	border-bottom 1px solid $off-black
-	color $off-black
-	&:visited, &:hover
-		color $off-black
+	color inherit
+    text-decoration none
 
-strong, b
+    text-shadow 0.03em 0 #fffff8,
+ -0.03em 0 #fffff8,
+ 0 0.03em #fffff8,
+ 0 -0.03em #fffff8,
+ 0.06em 0 #fffff8,
+ -0.06em 0 #fffff8,
+ 0.09em 0 #fffff8,
+ -0.09em 0 #fffff8,
+ 0.12em 0 #fffff8,
+ -0.12em 0 #fffff8,
+ 0.15em 0 #fffff8,
+ -0.15em 0 #fffff8
+    background-position: 0% 93%,
+ 100% 93%,
+ 0% 93%
+	@media screen and (-webkit-min-device-pixel-ratio: 0)
+		text-decoration none
+		border-bottom 1px solid $off-black
+
+strong,
+ b
 	font-weight bold
 
-em, i
+em,
+ i
 	font-style italic
 	
 ul
 	list-style-type none
 
 li
-	set-type-size(root, false)
+	set-type-size(root,
+ false)
 	+mq('bp-2')
-		set-type-size(medium, false)
+		set-type-size(medium,
+ false)
 
-img, video
+img,
+ video
 	display block
 	width 100%
 
@@ -69,11 +107,14 @@ button
 	margin 0
 	padding 0
 	font-size 1rem
-	set-type-size(root, false)
+	set-type-size(root,
+ false)
 	+mq('bp-2')
-		set-type-size(medium, false)
+		set-type-size(medium,
+ false)
 
-sub, sup
+sub,
+ sup
 	font-size 0.75rem
 	line-height 0
 	position relative
