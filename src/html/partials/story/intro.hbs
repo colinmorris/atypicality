@@ -140,8 +140,6 @@
 <p>
 By 1983, emotional ballads like “I Will Survive,” with their roots in Soul music, had mixed with the ascendent pop rock to produce the power ballads of the 1980s. Though not as danceable as “I Will Survive,” Bonnie Tyler's power-ballad “Total Eclipse Of The Heart,” which went to #1 in 1983, similarly electrified a low-valence song with an energetic production.
 </p>
-<p><small>(Oddly, its tempo is detected as being higher than “I Will Survive,” but this is probably another beat detection error.)
-</small></p>
 </div> <!-- /eclipse-contrast -->
 </div> <!-- /survive -->
 
@@ -185,7 +183,7 @@ By 1983, emotional ballads like “I Will Survive,” with their roots in Soul m
 	A signature characteristic of ballads is low valence. Ballads don't need to be about a sad topic, but even when they're written around a happy theme, their sound is serious and reflective.
 </p>
 <p>
-	Ballads also tend to be acoustic, and have relatively low danceability, tempo, and energy. (This song has been labelled with a fairly quick tempo of 126 bpm, which is a beat detection error - the true tempo is likely half of that.)
+	Ballads also tend to be acoustic, and have relatively low danceability, tempo, and energy.
 </p>
 </div>
 
@@ -291,4 +289,25 @@ Use the widget below to explore the sonic fingerprint of any song that reached #
 
 
 <div id='song-explorer' class='big-graphic'>
+</div>
+
+
+<div class="prose">
+<h2>Appendix</h2>
+
+<p>
+Data is courtesy of Michael Mauskapf. Sonic attribute data ultimately originates from Spotify's <a href="https://developer.spotify.com/spotify-echo-nest-api/">Echo Nest API</a>.
+</p>
+
+<p>
+The paper on which this is based,  “What Makes Popular Culture Popular? Product Features and Optimal Differentiation in Music,” uses a few additional attributes from Echo Nest not shown here, namely the song's key, its mode (major or minor), and its time signature. (As categorical attributes, these would have been difficult to incorporate into the visualizations shown here.)
+</p>
+
+<p>
+For the sake of simplicity, I manually corrected the tempo of two of the example songs visualized above ({Total Eclipse Of The Heart}, and {Love Takes Time}) to 1/2 of the algorithmically inferred tempo. Exploring the full catalog of number ones, you may still notice a few examples of songs whose detected tempo is half or double what it should be (such as {Hey Jude}).
+</p>
+
+<p>
+The code for this essay is available on GitHub <a href="https://github.com/colinmorris/atypicality">here</a>.
+</p>
 </div>

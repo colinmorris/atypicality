@@ -35,6 +35,7 @@ class SongChart {
   }
 
   toggleDebug() {
+    console.warn('Debug view deprecated');
     console.log('toggling debug view');
     this.debug = !this.debug;
     this.meta_tray.style('display', this.debug ? 'initial' : 'none');
@@ -79,6 +80,8 @@ class SongChart {
   }
 
   updateTray() {
+    // This relies on a bunch of attrs no longer included. So whatever.
+    return;
     this.meta_tray.text('');
     let attr_groups = [
       ['typicality', 'typicality_all', 'typicality_orig',

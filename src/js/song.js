@@ -2,12 +2,7 @@ import similarity from 'compute-cosine-similarity';
 import {sonic_attrs} from './common.js';
 
 let sonic_mean_attrs = sonic_attrs.map(s => 'mean_'+s);
-let numeric_song_attrs = [
-  'peak', 'wksonchart', 'typicality', 'typicality_all', 'typicality_orig',
-  'mode', 'raw_key', 'raw_time_signature', 'raw_tempo',
-  'typical_typicality_orig',
-  'typical_typicality'
-].concat(sonic_attrs).concat(sonic_mean_attrs);
+let numeric_song_attrs = [].concat(sonic_attrs).concat(sonic_mean_attrs);
 
 class Song {
 
@@ -19,7 +14,7 @@ class Song {
       s[attr] = +row[attr];
     }
     s.artist = row.artist;
-    s.track = row.track; // XXX
+    s.track = row.track;
     return s;
   }
 
@@ -53,6 +48,7 @@ class Song {
     return this.track;
   }
 
+  // (No longer used)
   similarity(s2) {
     let v1 = this.sonic_vector();
     let v2 = s2.sonic_vector();
