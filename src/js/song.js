@@ -15,6 +15,7 @@ class Song {
     }
     s.artist = row.artist;
     s.track = row.track;
+    s.spotify_id = row.spotify_id;
     return s;
   }
 

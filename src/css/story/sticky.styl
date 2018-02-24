@@ -59,5 +59,15 @@ $debug-flex = false
       flex .95 1
       min-height 0
       svg
-        max-height 80vh
+        //max-height 80vh
+        // TODO: Making sure there's room for the spotify embeds seems tricky. I'm probably missing something?
+        // In the previous state (when max-height was set to 80vh), radar svg seems to somehow squeeze out the 
+        // embeds (despite the latter div's 80px min height). .embeds
+        // still shows as having a height of 80 in the DOM explorer, but the total height of svg + embeds is greater
+        // than the height of the container, and the embeds are nowhere to be seen. Not sure what's going on.
+        max-height 80%
         min-height 0
+      .embeds
+        min-height 80px
+        iframe.contrast
+          float right
