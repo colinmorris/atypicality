@@ -81,6 +81,7 @@ class SongChart {
 
   updateTray() {
     // This relies on a bunch of attrs no longer included. So whatever.
+    //console.log(this.song);
     return;
     this.meta_tray.text('');
     let attr_groups = [

@@ -13,6 +13,7 @@ class Song {
     for (let attr of numeric_song_attrs) {
       s[attr] = +row[attr];
     }
+    s.raw_tempo = +row.raw_tempo;
     s.artist = row.artist;
     s.track = row.track;
     s.spotify_id = row.spotify_id;
