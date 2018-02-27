@@ -26,6 +26,7 @@ const atlas = [
 if (!window.Promise) window.Promise = Promise;
 
 // load fonts
-loadFontGroup(canela);
-loadFontGroup(publico);
-loadFontGroup(atlas);
+// jk
+//loadFontGroup(canela);
+//loadFontGroup(publico);
+//loadFontGroup(atlas);

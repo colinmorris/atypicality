@@ -3,6 +3,7 @@ import scroll_controller from './scroll.js';
 import {StickySongGraphic} from './sticky-song.js';
 import {attr_texts} from './sonic-reveal.js';
 import * as common from './common.js';
+import * as songdb from './song-db.js';
 
 class StoryTeller {
 
@@ -13,12 +14,10 @@ class StoryTeller {
     let sticky = this.root.select('.sticky');
     this.sticky = sticky;
     this.chart = new StickySongGraphic(sticky);
-    // TODO: deal with showing/hiding and setting/unsetting song on enter/leave
-    // (the below scene isn't really set up properly for that)
-    //this.chart.setSong("Believe")
     // NB: important to do this *before* setting up scene, so that the calculated
     // height of the root node includes the text added here.
     this.setupSonicIntro();
+    this.setupPlayerEmbeds();
     let viewportHeight = window.innerHeight;
     // The 'overall' scene during which the sticky graphic is pinned.
     // Contains a whole bunch of inner scenes that describe all the 
@@ -65,6 +64,22 @@ class StoryTeller {
       .append('p')
       .html(d=>d);
     }
+  }
+
+  setupPlayerEmbeds() {
+    let W = 300;
+    let H = 80;
+    this.root.selectAll('div.player')
+    .datum(function() { return this.dataset.song })
+    .append('iframe')
+    .attr('width', W)
+    .attr('height', H)
+    .attr('frameborder', '0') // I don't know what this and the next attr do
+    .attr('allow', 'encrypted-media')
+    .attr('src', function(track) {
+      let song = songdb.lookup(track);
+      return 'https://open.spotify.com/embed?uri=spotify:track:' + song.spotify_id;
+    });
   }
 
   setupScenes() {

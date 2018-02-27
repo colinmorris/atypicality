@@ -1,4 +1,4 @@
-
+// XXX: This whole module is now deprecated/unused.
 const W = 300;
 const H = 80;
 

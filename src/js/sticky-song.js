@@ -2,7 +2,6 @@ import {RadarChart} from './radar.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
 import {SongChartTitle} from './title.js';
-import {SpotifyEmbed} from './spotify-embed.js';
 
 /* Radar chart for a song plus other stuff like a title and metadata that 
    doesn't work in the radar chart (typicality, year, mode, key...)
@@ -35,8 +34,6 @@ class StickySongGraphic {
     this.svg = chart.append('svg')
     .classed('radar', true)
     this.radar = new RadarChart(this.svg, chart);
-    // TODO: May want to not have this on mobile, for space saving reasons?
-    this.player = new SpotifyEmbed(chart);
   }
 
   setSonicHighlight(sonics) {
@@ -90,7 +87,6 @@ class StickySongGraphic {
     if (song) {
       this.slider.setYear(song.year);
     }
-    this.player.setSong(song);
   }
 
   transitionSong(song) {
@@ -120,14 +116,12 @@ class StickySongGraphic {
     this.radar.contrast(song);
     this.slider.setContrastYear(this.contrast.year);
     this.title.setContrast(song);
-    this.player.setContrast(song);
   }
   decontrast() {
     this.contrast = undefined;
     this.radar.decontrast();
     this.slider.decontrast();
     this.title.setContrast();
-    this.player.setContrast();
   }
 
   tweenYear(year) {
