@@ -58,6 +58,7 @@ class StoryTeller {
       let attr = common.sonic_attrs[j];
       let div = root.append('div')
         .classed('step', true)
+        .classed('card', true)
         .attr('data-hide_avg', '1')
         .attr('data-highlight_sonics', attr);
       let paras = attr_texts[attr];
@@ -136,7 +137,7 @@ class StoryTeller {
       scene.on('progress', progress_cb);
     }
     scene.on('enter', (event) => {
-      //console.debug('Entered scene with data ', dat);
+      console.debug('Entered scene with data ', dat);
       sel.classed('active', true)
       .classed('post-active', false);
       this.enterCbForStepdat(dat)(event);
@@ -145,6 +146,7 @@ class StoryTeller {
     // XXX: If steps end up not tiling vertical plane may need to also add leave callbacks
     // for certain step data attrs
     .on('leave', (event) => {
+      console.debug('Left scene with data ', dat);
       sel.classed('active', false)
       .classed('post-active', true);
     })

@@ -1,0 +1,35 @@
+card()
+  #main-prose
+    p.step, div.card
+      {block}
+  
+$p = 160px
++card()
+  border-style solid
+  border-width 1px
+  border-color black
+  background lighten(#f3f3f3, 30%)
+  background-clip content-box
+  opacity .5
+  &.active
+    opacity 1
+  &.post-active
+    opacity .8
+  transition opacity .5s
+  // TODO: probably redundant?
+  margin-top ($p / 4)
+  margin-bottom $p
+  if $debug-scroll
+    &.active
+      background-color rgba(66, 255, 2, .05)
+  for n in 1 2 3 4 5
+    .pad-bottom-{n}
+      margin-bottom $p * n
+    &.unpad-bottom-{n}
+      margin-bottom ($p / n)
+
+//+mq(mobile)
+// Assumed to be 'wrappers' containing inner step <p>s
+#main-prose div.step
+  &:last-child
+    margin-bottom $p
