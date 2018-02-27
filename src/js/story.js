@@ -22,12 +22,14 @@ class StoryTeller {
     // The 'overall' scene during which the sticky graphic is pinned.
     // Contains a whole bunch of inner scenes that describe all the 
     // transitions on that graphic.
+    let outer_dur = Math.max(1, this.root.node().offsetHeight - viewportHeight);
+    console.log('Outer scene duration = ' + outer_dur);
     let outer_scene = new ScrollMagic.Scene({
       triggerElement: rootsel,
       triggerHook: 'onLeave',
-      duration: Math.max(1, this.root.node().offsetHeight - viewportHeight)
+      duration: outer_dur
     })
-    .setPin('#story .sticky')
+    .setPin('#story .sticky', {pushFollowers: false})
     .on('enter', () => {
       console.debug('Pinning story div');
       this.toggleFixed(true, false);
