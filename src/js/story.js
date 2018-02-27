@@ -5,6 +5,13 @@ import {attr_texts} from './sonic-reveal.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
 
+/* Calculate the total heigh of a "card" node *including bottom margin*
+*/
+function totalHeight(node) {
+  let style = window.getComputedStyle ? getComputedStyle(node, null) : node.currentStyle;
+  return node.offsetHeight + (parseInt(style.marginBottom) || 0);
+}
+
 class StoryTeller {
 
   constructor() {
@@ -26,12 +33,13 @@ class StoryTeller {
     console.log('Outer scene duration = ' + outer_dur);
     let outer_scene = new ScrollMagic.Scene({
       triggerElement: rootsel,
-      triggerHook: 'onLeave',
-      duration: outer_dur
+      triggerHook: 'onLeave', // i.e. when this hits the top
+      duration: outer_dur,
+      //loglevel: 3
     })
     .setPin('#story .sticky', {pushFollowers: false})
     .on('enter', () => {
-      console.debug('Pinning story div');
+      console.log('Pinning story div');
       this.toggleFixed(true, false);
     })
     .on('leave', (e) => {
@@ -110,7 +118,7 @@ class StoryTeller {
     let scene = new ScrollMagic.Scene({
       triggerElement: node,
       triggerHook: 'onCenter',
-      duration: node.offsetHeight,
+      duration: totalHeight(node),
       offset: offset
     });
     /* Notes on trigger hooks:

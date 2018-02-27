@@ -9,27 +9,39 @@ $p = 160px
   border-width 1px
   border-color black
   background lighten(#f3f3f3, 30%)
+  // I don't remember why I put this
   background-clip content-box
-  opacity .5
+  opacity .4
   &.active
     opacity 1
   &.post-active
     opacity .8
+    +mq(mobile)
+      opacity .6
   transition opacity .5s
   // TODO: probably redundant?
   margin-top ($p / 4)
   margin-bottom $p
-  if $debug-scroll
-    &.active
-      background-color rgba(66, 255, 2, .05)
   for n in 1 2 3 4 5
     .pad-bottom-{n}
       margin-bottom $p * n
     &.unpad-bottom-{n}
       margin-bottom ($p / n)
 
-//+mq(mobile)
+$mp = $p * 2
++mq(mobile)
+  +card()
+    margin-top ($mp / 4)
+    margin-bottom $mp
+    for n in 1 2 3 4 5
+      .pad-bottom-{n}
+        margin-bottom $mp * n
+      &.unpad-bottom-{n}
+        margin-bottom ($mp / n)
+
 // Assumed to be 'wrappers' containing inner step <p>s
 #main-prose div.step
   &:last-child
     margin-bottom $p
+    +mq(mobile)
+      margin-bottom $mp

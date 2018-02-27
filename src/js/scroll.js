@@ -4,6 +4,6 @@ import ScrollMagic from 'scrollmagic';
 //import 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'
 
 // Single global SM controller shared across graphics
-const controller = new ScrollMagic.Controller();
+const controller = new ScrollMagic.Controller({loglevel: 2});
 
 export default controller;
