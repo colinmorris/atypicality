@@ -3,6 +3,7 @@
 import explorer from './song-explorer.js';
 import {StoryTeller} from './story.js';
 import scroll_controller from './scroll.js';
+import {jumpTo, select} from './utils/dom.js';
 
 let glob = {};
 
@@ -31,6 +32,9 @@ function init() {
   }
   // Ugh, but for some reason it seems this doesn't work with 
   // whatever browserify autorefresh thing? bleh.
+
+  // XXX
+  d3.select('#intro-text').on('click', () => jumpTo(select('#song-explorer')));
 }
 init = init.bind(glob)
 

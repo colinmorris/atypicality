@@ -1,6 +1,7 @@
 import {RadarChart} from './radar.js';
 import {SongChart} from './song-chart.js';
 import {Song} from './song.js';
+import {isMobile} from './mobile.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
 
@@ -32,9 +33,12 @@ class SongExplorer {
     this.decade = default_song.decade;
     this.year = default_song.year;
 
+    // Set up the main 'picker' controls (for selecting decade, year, and ultimately song)
     this.setupControls();
+    // A container for the radar chart and associated elements (e.g. heading)
     this.songView = this.root.append('div').classed('song-view', true);
     this.songChart = new SongChart(this.songView);
+    // The 'related songs' view (below the chart)
     this.moreSongs = this.root.append('div')
     let moreby = this.moreSongs.append('div')
       .classed('moreby', true)
@@ -56,6 +60,10 @@ class SongExplorer {
     this.selectSong(default_song);
   }
 
+  get compact() {
+    return isMobile();
+  }
+
   onResize() {
     this.songChart.onResize();
   }
@@ -63,7 +71,8 @@ class SongExplorer {
   setupControls() {
     let picker = this.root.append('div').classed('picker', true)
 
-    let decade_picker = picker.append('div').classed('decade-picker', true)
+    let picker_ele_type = 'div';
+    let decade_picker = picker.append(picker_ele_type).classed('decade-picker', true)
 
     decade_picker.selectAll('.decade-selector')
     .data(decades)
@@ -74,10 +83,20 @@ class SongExplorer {
     .text(decade => decade+'s')
     .on('click', decade => this.setDecade(decade))
 
-    this.year_picker = picker.append('div').classed('year-picker', true);
+    this.year_picker = picker.append(picker_ele_type).classed('year-picker', true);
     this.updateYears();
 
-    this.song_picker = picker.append('div').classed('song-picker', true);
+    this.song_picker = picker.append(this.compact ? 'select' : picker_ele_type)
+      .classed('song-picker', true);
+    if (this.compact) {
+      this.song_picker.on('change', () => {
+        this.selectSong(songdb.lookup(d3.event.target.value));
+      });
+      this.dummy_song_option = this.song_picker.append('option')
+      .classed('dummy', true)
+      .attr('disabled', true);
+
+    }
     this.updateSongs();
   }
 
@@ -124,32 +143,29 @@ class SongExplorer {
     sel.exit().remove();
 
     let newsongs = sel.enter()
-    .append('a')
+    .append(this.compact ? 'option' : 'a')
     .classed('song-selector', true)
 
-    sel.merge(newsongs)
+    sel = sel.merge(newsongs)
     .text(song=>song.track)
-    //.attr('title', song => 100 * song.typicality.toPrecision(2) + '% typical')
-    // Originally tried coloring on typicality, then on similarity to focal song,
-    // but it all ended up kind of ugly and not very useful.
-    //.style('color', song => this._songColor(song)) // TODO: update on song select
-    .on('click', song => this.selectSong(song))
-    .on('mouseover', song => this.contrastSong(song))
-    .on('mouseout', song => this.decontrastSong())
-    .on('contextmenu', song => this.songChart.setSticky()) // XXX: temporary hack
-    .classed('active', song => song==this.song)
-  }
-
-  // XXX: not used
-  _songColor(song) {
-    if (!this.song) {
-      return 'black';
+    if (this.compact) {
+      sel
+      .attr('value', song => song.track)
+      .attr('selected', song => (song == this.song) ? '1' : null);
+      this.dummy_song_option.attr('selected',
+        (!this.song || this.song.year != this.year) ? '1' : null
+      );
     } else {
-      let sim = this.song.similarity(song);
-      return common.similarity_cmap(sim);
+      sel
+      .on('click', song => this.selectSong(song))
+      .on('mouseover', song => this.contrastSong(song))
+      .on('mouseout', song => this.decontrastSong())
+      .on('contextmenu', song => this.songChart.setSticky()) // XXX: temporary hack
+      .classed('active', song => song==this.song);
     }
   }
 
+  // (Used to fill in the various 'related songs' sections below the song chart)
   populateSongs(root, songs) {
     // TODO: refactor above
     let sel = root.selectAll('.song-selector').data(songs);
@@ -160,7 +176,6 @@ class SongExplorer {
 
     sel.merge(newsongs)
     .text(song=>song.track)
-    //.style('color', song => this._songColor(song))
     .on('click', song => this.selectSong(song))
     .on('mouseover', song => this.contrastSong(song))
     .on('mouseout', song => this.decontrastSong())
@@ -172,7 +187,12 @@ class SongExplorer {
   selectSong(song) {
     console.debug(`Setting song to ${song.track}`)
     this.song = song;
-    this.song_picker.selectAll('.song-selector').classed('active', song => song==this.song);
+    // bleh
+    if (this.compact) {
+      this.updateSongs();
+    } else {
+      this.song_picker.selectAll('.song-selector').classed('active', song => song==this.song);
+    }
     this.songChart.setSong(this.song);
     this.updateMoreSongs();
   }
