@@ -2,6 +2,7 @@ import {RadarChart} from './radar.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
 import {SongChartTitle} from './title.js';
+import throttle from 'lodash.throttle';
 
 /* Radar chart for a song plus other stuff like a title and metadata that 
    doesn't work in the radar chart (typicality, year, mode, key...)
@@ -17,6 +18,7 @@ Overall structure:
 */
 class StickySongGraphic {
   constructor (root) {
+    this.finishTween = throttle(this._finishTween, 200);
     this.root = root;
     this.name = root.attr('class');
     // current 'primary' song, if any
@@ -127,12 +129,14 @@ class StickySongGraphic {
   tweenYear(year) {
     // TODO: maybe a very short transition?
     this.slider.snapYear(year);
-    // TODO: debounce (here or one level up). Or just make this less inefficient. 
+    this.finishTween(year);
+  }
+  _finishTween(year) {
     let eg = songdb.query_one({year: year});
     let kwargs = {
       // maybe different easing fn too?
       speedup: 3,
-      ease: d3.cubicOut
+      ease: d3.cubic
     };
     this.radar.plotBaseline(eg, kwargs);
   }

@@ -9,8 +9,15 @@ import * as songdb from './song-db.js';
 /* Calculate the total heigh of a "card" node *including bottom margin*
 */
 function totalHeight(node) {
+  // TODO: bleh, this doesn't play nicely when there's a div containing a couple
+  // p's each having a significant margin
+  // hack
+  let base_height = node.offsetHeight;
+  if (node.children.length) {
+    node = node.children[node.children.length - 1];
+  }
   let style = window.getComputedStyle ? getComputedStyle(node, null) : node.currentStyle;
-  return node.offsetHeight + (parseInt(style.marginBottom) || 0);
+  return base_height + (parseInt(style.marginBottom) || 0);
 }
 
 class StoryTeller {
@@ -118,6 +125,9 @@ class StoryTeller {
     let offset = isMobile() ? 
       -1 * window.innerHeight * .25
       : 0;
+    if (dat.offset) {
+      offset += dat.offset;
+    }
     let sel = d3.select(node);
     let scene = new ScrollMagic.Scene({
       triggerElement: node,
