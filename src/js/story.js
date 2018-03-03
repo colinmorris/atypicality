@@ -67,13 +67,14 @@ class StoryTeller {
       let attr = common.sonic_attrs[j];
       let div = root.append('div')
         .classed('step', true)
-        .classed('card', true)
+        //.classed('card', true)
         .attr('data-hide_avg', '1')
         .attr('data-highlight_sonics', attr);
       let paras = attr_texts[attr];
       div.selectAll('p').data(paras)
       .enter()
       .append('p')
+      .classed('card', true) // step?
       .html(d=>d);
     }
   }
