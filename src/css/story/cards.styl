@@ -3,6 +3,7 @@ card()
     p.step, div.card
       {block}
   
+// Default card bottom margin (desktop)
 $p = 160px
 +card()
   border-style solid
@@ -28,7 +29,8 @@ $p = 160px
     &.unpad-bottom-{n}
       margin-bottom ($p / n)
 
-$mp = $p * 2
+// Default bottom margin on mobile
+$mp = $p * 2.5
 +mq(mobile)
   +card()
     margin-top ($mp / 4)

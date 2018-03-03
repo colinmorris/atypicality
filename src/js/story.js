@@ -2,6 +2,7 @@ import ScrollMagic from 'scrollmagic';
 import scroll_controller from './scroll.js';
 import {StickySongGraphic} from './sticky-song.js';
 import {attr_texts} from './sonic-reveal.js';
+import {isMobile} from './mobile.js';
 import * as common from './common.js';
 import * as songdb from './song-db.js';
 
@@ -113,7 +114,9 @@ class StoryTeller {
     show_avg
     */
     // Negative value to trigger before hitting the center, positive for after.
-    let offset = 0;
+    let offset = isMobile() ? 
+      -1 * window.innerHeight * .25
+      : 0;
     let sel = d3.select(node);
     let scene = new ScrollMagic.Scene({
       triggerElement: node,
