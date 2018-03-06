@@ -1,9 +1,17 @@
+#explorer-intro
+  margin-top:3rem
+  
+
 #song-explorer
   +mq(mobile)
-    margin-left 5%
-    margin-right 5%
-  margin-left: 10em
+    margin 0 1rem
   margin-bottom: 10em
+  
+  h4
+    set-type-size(small,true)
+    font-weight: bold
+    text-transform: uppercase
+    margin-bottom:.5rem;
 
 .meta_factoid
   margin-right: 1rem
@@ -11,12 +19,27 @@
   font-size: .6rem
   display: inline-block
 
+h3.songchart-title
+  min-height 72px
 
 .picker
   a
-    margin: auto .5rem
+    set-type-size(small,true)
+    display:inline-block;
+    margin: 0 .5rem .5rem 0
+    background-color: #e8e8e8
+    padding: .5rem .75rem .65rem
     cursor: pointer
   a.active
+    background-color: $focal_color
+    color: #fff
+    font-weight: bold
+  a:hover, a:focus
+    background-color: $contrast_color
+    color: #fff
     font-weight: bold
   > div
-    margin: 20px auto
+    margin: 1rem auto
+
+.year-picker
+  set-type-size(medium,true)

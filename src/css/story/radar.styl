@@ -5,8 +5,9 @@
   margin: 0 auto
 
   .axis
-    $fs = 12px
+    $fs = 8px
     text
+      z-index 100
       font-size $fs
       $d = 1s
       transition font-size $d, font-weight $d
@@ -14,19 +15,21 @@
       letter-spacing 0.05em
       text-transform uppercase
       text-anchor middle
+      baseline-shift 5px
+      font-weight bold
+      fill #999
     text.left
       text-anchor start
     text.right
       text-anchor end
-    text.left, text.right
-      // XXX: hack
-      transform translateY(-2px)
     text.highlight
       font-size $fs * 1.3
-      font-weight bold
+      fill black
+    &:nth-of-type(2) text, &:nth-of-type(3) text, &:nth-of-type(4) text
+      baseline-shift: -15px
     line
       stroke-width .5
-      stroke black
+      stroke #999
 
   .marker
     fill-opacity .01

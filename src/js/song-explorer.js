@@ -50,12 +50,12 @@ class SongExplorer {
     let simsongs = this.moreSongs.append('div')
       .classed('simsongs', true)
       .classed('picker', true)
-    simsongs.append('span').classed('label', true).text('Similar songs: ');
+    simsongs.append('h4').classed('label', true).text('Similar songs');
     simsongs.append('span').classed('songs', true);
     let simsongs_future = this.moreSongs.append('div')
       .classed('simsongs-future', true)
       .classed('picker', true)
-    simsongs_future.append('span').classed('label', true).text('Dissimilar songs: ');
+    simsongs_future.append('h4').classed('label', true).text('Dissimilar songs');
     simsongs_future.append('span').classed('songs', true);
     this.selectSong(default_song);
   }

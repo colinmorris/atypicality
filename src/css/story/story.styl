@@ -41,19 +41,12 @@ $debug-scroll = false
   max-width: 40rem
 
   h3
+    font-family copernicus, georgia, serif
+    font-weight 700
     text-align center
-    $fs = 2.7rem
+    $fs = 2rem
     font-size $fs
-    letter-spacing .05em
-    // ridiculous
-    $flourish = "∿"
-    &::before, &::after
-      content $flourish
-      font-size $fs * .6
-      padding $fs * .05
-      display inline-block
-      $dy = -($fs * .13)
-      transform s('translate(0, %s)', $dy)
+
 
   code
     font-family monospace

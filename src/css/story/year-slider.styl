@@ -1,21 +1,21 @@
 // Height of SVG in terms of viewBox/user units
-$height = 50px
+$height = 70px
 #story svg.year-slider
   min-height 0
   text.year
     text-anchor middle
-    font-size ($height/3)
-    font-family Helvetica, Arial, sans-serif
+    font-size 10pt
+    font-feature-settings 'lnum'
+    font-family Polaris, Helvetica, sans-serif
     font-weight bold
-    +mq(mobile)
-      font-size ($height/2)
-  $shift = 5
+
+  $shift = 9
   .marker.focal text.year
     alignment-baseline baseline
     baseline-shift $shift
   .marker.contrast text.year
     alignment-baseline hanging
-    baseline-shift (1 - $shift)
+    baseline-shift (-1*$shift)
   .marker.hidden
     opacity 0
   .marker
