@@ -1,21 +1,37 @@
+$debug-cards = false
+
 card()
   #main-prose
     p.step, div.card, p.card
       {block}
+
+// Same as above, but don't apply margins
+cardish()
+  #main-prose
+    p, div.card
+      {block}
   
 // Default card bottom margin (desktop)
 $p = 160px
-+card()
++cardish()
   padding:1rem
   background #fff
   opacity .4
+  if $debug-cards
+    border-width 1px
+    border-style solid
   &.active
     opacity 1
+    if $debug-cards
+      background-color #bbffcc
   &.post-active
     opacity .8
     +mq(mobile)
       opacity .6
+    if $debug-cards
+      background-color #ffccbb
   transition opacity .5s
++card()
   // TODO: probably redundant?
   margin-top ($p / 4)
   margin-bottom $p

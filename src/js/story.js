@@ -13,7 +13,8 @@ function totalHeight(node) {
   // p's each having a significant margin
   // hack
   let base_height = node.offsetHeight;
-  if (node.children.length) {
+  // hacks on hacks
+  if (node.tagName && node.tagName == 'DIV' && node.children.length) {
     node = node.children[node.children.length - 1];
   }
   let style = window.getComputedStyle ? getComputedStyle(node, null) : node.currentStyle;
@@ -160,6 +161,8 @@ class StoryTeller {
     }
     scene.on('enter', (event) => {
       console.debug('Entered scene with data ', dat);
+      console.debug('Scene duration = ', scene.duration());
+      console.debug('Node = ', node);
       sel.classed('active', true)
       .classed('post-active', false);
       this.enterCbForStepdat(dat)(event);
