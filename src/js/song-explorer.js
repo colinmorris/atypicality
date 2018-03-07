@@ -110,8 +110,8 @@ class SongExplorer {
     this.updateSongs();
   }
 
+  // Update the year selector buttons (e.g. on decade change)
   updateYears() {
-    // Update the year selector buttons (e.g. on decade change)
     let years = years_for_decade(this.decade);
     let yearsel = this.year_picker.selectAll('.year-selector').data(years)
 
@@ -194,6 +194,9 @@ class SongExplorer {
       this.song_picker.selectAll('.song-selector').classed('active', song => song==this.song);
     }
     this.songChart.setSong(this.song);
+    // there might be some redundant/repeated code paths here...
+    this.setDecade(this.song.decade);
+    this.setYear(this.song.year);
     this.updateMoreSongs();
   }
 
