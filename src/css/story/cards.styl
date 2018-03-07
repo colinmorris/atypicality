@@ -2,7 +2,7 @@ $debug-cards = false
 
 card()
   #main-prose
-    p.step, div.card, p.card
+    p.step, div.card, p.card, div.step.spacer
       {block}
 
 // Same as above, but don't apply margins
@@ -59,3 +59,6 @@ $mp = $p * 2.5
     margin-bottom $p
     +mq(mobile)
       margin-bottom $mp
+
+div.step.spacer
+  height 1ex

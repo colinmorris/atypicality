@@ -11,6 +11,10 @@ $debug-flex = false
   // I'm not sure if this flex stuff is actually providing any benefit, but kind of 
   // afraid to take it out at this point.
   .sticky
+    &.hidden
+      opacity 0
+    opacity 1
+    transition opacity 1s
     if $debug-flex
       & > *
         border-width 2px

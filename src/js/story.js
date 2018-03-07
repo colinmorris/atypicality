@@ -57,6 +57,11 @@ class StoryTeller {
     })
     .addTo(this.controller)
     this.setupScenes();
+    this.setHidden(true);
+  }
+
+  setHidden(hidden) {
+    this.sticky.classed('hidden', hidden);
   }
 
   // XXX: deprecated
@@ -205,6 +210,9 @@ class StoryTeller {
       }
       if (dat.contrast) {
         this.chart.setContrast(dat.contrast);
+      }
+      if (dat.reveal) {
+        this.setHidden(false);
       }
     }
   }
