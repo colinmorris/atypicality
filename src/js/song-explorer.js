@@ -176,7 +176,7 @@ class SongExplorer {
 
     sel.merge(newsongs)
     .text(song=>song.track)
-    .on('click', song => this.selectSong(song))
+    .on('click touchstart', song => this.selectSong(song))
     .on('mouseover', song => this.contrastSong(song))
     .on('mouseout', song => this.decontrastSong())
     .on('contextmenu', song => this.songChart.setSticky()) // XXX: temporary hack
